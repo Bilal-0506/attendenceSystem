@@ -1,0 +1,35 @@
+export var colors = {
+  theme: '#FA370B',
+  themeSecondary: '#0081FF',
+  statusBarLight: '#FDF9F2',
+  placeHolderColor: '#92979D',
+  inputColor: '#F0F2F3',
+  lightBackground: '#f5f5f5',
+  lightText: '#666666',
+  white: '#FFFFFF',
+  black: '#000000',
+  lightBlack: '#333333',
+  grey: '#D9D9D9',
+  dividerColor: '#DADADA',
+  dividerColor2: '#C7C7C7',
+  green: '#4CC26C',
+  greyLight: '#E9E9E9',
+  errorColor: '#FF0000',
+  textRed: '#DA2828',
+  placeholderColor: '#cccccc',
+  inActiveTab: '#C2C9D1',
+  tabColor: '#F9FAFA',
+  inActiveSlide: '#E1E4E8',
+  darkgrey: '#616569',
+  loanText: '#455A64',
+  loanBorder: '#D8D8D8',
+  secBlack: '#294E5E',
+  deleteColor: '#CF5151',
+  completedColor: '#00CD52',
+  indicatorColor: '#EBEBEB',
+  separatorColor: '#DFDFDF',
+};
+
+export const updateTheme = theme => {
+  colors = theme;
+};
