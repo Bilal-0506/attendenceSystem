@@ -4,6 +4,11 @@ const imageUrl = '../../../assets/images';
 const appImages = {};
 
 const appIcons = {
+  // Attendence onBoardingIcon
+  onBoardingOneIcon: require(`${iconUrl}/onBoardingOneIcon.png`),
+  onBoardingTwoIcon: require(`${iconUrl}/onBoardingTwoIcon.png`),
+  onBoardingThreeIcon: require(`${iconUrl}/onBoardingThreeIcon.png`),
+
   backIcon: require(`${iconUrl}/backIcon.png`),
   dashboardTab: require(`${iconUrl}/dashboardTab.png`),
   profileTab: require(`${iconUrl}/profileTab.png`),
@@ -91,6 +96,8 @@ const appIcons = {
   instagramIcon: require(`${iconUrl}/instagramIcon.png`),
   twitterIcon: require(`${iconUrl}/twitterIcon.png`),
   successIcon: require(`${iconUrl}/successImage.png`),
+  selfService: require(`${iconUrl}/self-service.png`),
+  checkIna: require(`${iconUrl}/checkIna.png`),
 };
 
 export {appImages, appIcons};

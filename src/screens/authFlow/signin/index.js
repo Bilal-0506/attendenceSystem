@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useRef, useState, useEffect} from 'react';
+import {View, Text, ActivityIndicator} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {
   GreenSnackbar,
@@ -10,13 +10,13 @@ import {
   heightPixel,
   routes,
 } from '../../../services';
-import { Global, MyInput } from '../../../components';
-import { styles } from './styles';
+import {Global, MyInput} from '../../../components';
+import {styles} from './styles';
 import Button from '../../../components/button';
-import { isLoginValid } from '../../../services/validations';
-import { userDataSave } from '../../../redux/Slices/userDataSlice';
+import {isLoginValid} from '../../../services/validations';
+import {userDataSave} from '../../../redux/Slices/userDataSlice';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({navigation}) => {
   const statusBar = useRef(null);
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
@@ -30,29 +30,36 @@ const LoginScreen = ({ navigation }) => {
 
   const onPressLogin = () => {
     if (isLoginValid(email, password)) {
-      setIsLoading(true);
     }
   };
 
   return (
-    <Global navigation={navigation} loginHeader={true} ref={statusBar}>
-      <View style={{ marginBottom: heightPixel(100) }}>
-        <Text style={styles.heading}>Welcome Back!</Text>
+    <Global
+      paddingHorizontal={true}
+      navigation={navigation}
+      header={true}
+      title={'Welcome Back'}
+      titleIcon={appIcons.handIcon}
+      isLoading={isLoading}
+      description={'Hello there, login to continue'}
+      ref={statusBar}>
+      <View style={{marginBottom: heightPixel(100)}}>
         <MyInput
-          leftIcon={appIcons.mailIcon}
           value={email}
           placeHolder={'Enter your email'}
           setValue={setEmail}
           keyboardType={'email-address'}
+          title={'Email Address'}
+          marginTop={heightPixel(6)}
         />
         <MyInput
-          leftIcon={appIcons.lockIcon}
           value={password}
           placeHolder={'Enter your Password'}
           setValue={setPassword}
           secure={secure}
           onPressRight={() => setSecure(!secure)}
           rightIcon={secure ? appIcons.eyeCloseIcon : appIcons.eyeIcon}
+          title={'Password'}
         />
         <View style={styles.rowSpace}>
           <Text
@@ -70,7 +77,12 @@ const LoginScreen = ({ navigation }) => {
       {isLoading ? (
         <ActivityIndicator color={colors.theme} size={'small'} />
       ) : (
-        <Button onPress={() => { }} children={'Login'} />
+        <Button
+          onPress={() => {
+            navigation.navigate(routes.buildProfile);
+          }}
+          children={'Login'}
+        />
       )}
     </Global>
   );

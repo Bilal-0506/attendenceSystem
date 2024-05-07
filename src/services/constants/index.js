@@ -1,4 +1,4 @@
-import { Dimensions, PixelRatio } from 'react-native';
+import {Dimensions, PixelRatio} from 'react-native';
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('screen').width;
@@ -23,6 +23,7 @@ export const routes = {
 
   // DashBoard Broker
   dashboard: 'dashboard',
+  leaveRequest: 'leaveRequest',
   booking: 'booking',
   wholeSale: 'wholeSale',
 
@@ -54,7 +55,7 @@ export const loaderStyles = {
 
 export const wp = p => WINDOW_WIDTH * (p / 100);
 export const hp = p => WINDOW_HEIGHT * (p / 100);
-export { WINDOW_HEIGHT, WINDOW_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH };
+export {WINDOW_HEIGHT, WINDOW_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH};
 
 const widthBaseScale = SCREEN_WIDTH / 375;
 const heightBaseScale = SCREEN_HEIGHT / 812;
@@ -74,4 +75,4 @@ const fontPixel = size => {
   return heightPixel(size);
 };
 
-export { widthPixel, heightPixel, fontPixel };
+export {widthPixel, heightPixel, fontPixel};

@@ -6,20 +6,34 @@ import {
   colors,
   fontFamily,
   heightPixel,
+  hp,
   routes,
   widthPixel,
 } from '../../../services';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
-export default function DashboardHeader({navigation, route}) {
+export default function DashboardHeader({
+  navigation,
+  route,
+  name,
+  designation,
+}) {
   return (
     <View style={styles.main}>
+      <View style={{height: hp(5), width: hp(5), borderRadius: hp(2.5)}}>
+        <Image
+          style={{height: '100%', width: '100%', resizeMode: 'center'}}
+          source={appIcons.backIcon}
+        />
+      </View>
       <View>
         <View style={styles.row}>
-          <Text style={styles.title}>Welcome Back!</Text>
+          <Text style={styles.subTitle}>{name ? name : 'Name'}</Text>
           <Image style={styles.icon} source={appIcons.handIconOne} />
         </View>
-        <Text style={styles.subTitle}>Ken Tung</Text>
+        <Text style={styles.title}>
+          {designation ? designation : 'dasignation'}
+        </Text>
       </View>
       <Pressable onPress={() => navigation.navigate(routes.notification)}>
         <Image source={appIcons.notificationIcon} style={styles.iconStyle} />
@@ -35,6 +49,7 @@ const styles = StyleSheet.create({
     paddingVertical: heightPixel(16),
     paddingHorizontal: widthPixel(20),
     justifyContent: 'space-between',
+    // backgroundColor: 'yellow',
   },
   row: {
     flexDirection: 'row',

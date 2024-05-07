@@ -1,5 +1,5 @@
 export var colors = {
-  theme: '#FA370B',
+  theme: '#3085FE',
   themeSecondary: '#0081FF',
   statusBarLight: '#FDF9F2',
   placeHolderColor: '#92979D',
@@ -28,6 +28,7 @@ export var colors = {
   completedColor: '#00CD52',
   indicatorColor: '#EBEBEB',
   separatorColor: '#DFDFDF',
+  inActiveColor: '#E7E7E8',
 };
 
 export const updateTheme = theme => {

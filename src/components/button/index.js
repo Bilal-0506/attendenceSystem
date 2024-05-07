@@ -54,7 +54,7 @@ const Button = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: heightPixel(40),
+    height: heightPixel(50),
     alignItems: 'center',
     alignSelf: 'center',
     flexDirection: 'row',

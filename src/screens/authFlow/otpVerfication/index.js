@@ -1,53 +1,121 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
-import { useDispatch } from 'react-redux';
+import React, {useRef, useState, useEffect} from 'react';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {useDispatch} from 'react-redux';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
+import CountDownTimer from 'react-native-countdown-timer-hooks';
 
-import { GreenSnackbar, RedSnackbar, colors } from '../../../services';
-import { Global } from '../../../components';
-import { styles } from './styles';
+import {
+  GreenSnackbar,
+  RedSnackbar,
+  appIcons,
+  colors,
+  heightPixel,
+  routes,
+} from '../../../services';
+import {Global} from '../../../components';
+import {styles} from './styles';
 import Button from '../../../components/button';
 
-const OtpVerficationScreen = ({ navigation, route }) => {
-  var user = auth().currentUser;
+const OtpVerficationScreen = ({navigation, route}) => {
   const statusBar = useRef(null);
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
+  const timer = useRef();
+  const [otp, setOtp] = useState('');
+  const [timerEnd, setTimerEnd] = useState(false);
 
   useEffect(() => {
     statusBar.current?.darkContent();
-    return () => { };
   }, []);
 
+  const check = () => {
+    if (otp == '') {
+      RedSnackbar('OTP required');
+    } else if (otp.length < 4) {
+      RedSnackbar('Invalid otp');
+    } else {
+      GreenSnackbar('OTP verfied');
+      setOtp('');
+      if (route.params?.screen == 'signup') {
+        navigation.replace(routes.buildProfile);
+      } else {
+        navigation.replace(routes.changePassword);
+      }
+    }
+  };
+
+  const timerCallbackFunc = timerFlag => {
+    // Setting timer flag to finished
+    setTimerEnd(timerFlag);
+  };
+
+  const resetTimer = () => {
+    setTimerEnd(false);
+    timer.current?.resetTimer();
+  };
 
   return (
     <Global
-      isBack={true}
+      paddingHorizontal={true}
       navigation={navigation}
-      loginHeader={true}
-      globalStyle={styles.wrapper}
-      ref={statusBar}>
-      <View>
-        <Text style={styles.title}>
-          "We've sent a verification email to the address you provided:[
-          {route.params?.email}]." "Please check your inbox (and spam folder if
-          needed) and click the verification link to complete your
-          registration." "Once you verify your email, you'll be able to log in
-          and start using [Carnet]."
-        </Text>
-      </View>
-      {isLoading ? (
-        <ActivityIndicator color={colors.theme} size={'small'} />
-      ) : (
-        <View>
-          <Text onPress={() => { }} style={styles.titleTWo}>
-            Dn't get the email
-          </Text>
-          <Button
-            onPress={() => onPressCheckVerfication()}
-            children={'Check Email Verfification'}
+      header={true}
+      title={'OTP Verification'}
+      isBack={true}
+      titleIcon={appIcons.handIcon}
+      description={
+        'Enter your 4 digit OTP code that we have just sent on your email.'
+      }
+      ref={statusBar}
+      globalStyle={styles.wrapper}>
+      <View style={{marginBottom: heightPixel(60)}}>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: heightPixel(20),
+          }}>
+          <OTPInputView
+            style={styles.otpView}
+            pinCount={4}
+            codeInputFieldStyle={styles.underlineStyleBase}
+            codeInputHighlightStyle={styles.underlineStyleBase}
+            onCodeChanged={setOtp}
+            onCodeFilled={code => {
+              setOtp(code);
+            }}
+            code={otp}
           />
+          {!timerEnd ? (
+            <CountDownTimer
+              ref={timer}
+              timestamp={60}
+              timerCallback={timerCallbackFunc}
+              containerStyle={styles.timerStyle}
+              textStyle={styles.timerText}
+            />
+          ) : (
+            <View style={styles.timerStyle}>
+              <Text style={styles.timerText}>00:00</Text>
+            </View>
+          )}
+          <TouchableOpacity disabled={!timerEnd} onPress={() => resetTimer()}>
+            <Text style={styles.resend}>
+              Didn’t get code? -{' '}
+              <Text
+                style={[
+                  styles.resend,
+                  {
+                    color: colors.theme,
+                    textDecorationLine: 'underline',
+                    textDecorationColor: colors.theme,
+                  },
+                ]}>
+                Resend code
+              </Text>
+            </Text>
+          </TouchableOpacity>
         </View>
-      )}
+      </View>
+      <Button onPress={() => check()} children={'Continue'} />
     </Global>
   );
 };

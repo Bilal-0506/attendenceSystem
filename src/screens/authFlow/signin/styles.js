@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   forgot: {
-    fontFamily: fontFamily.appTextMedium,
+    fontFamily: fontFamily.appTextSemiBold,
     fontSize: responsiveFontSize(1.5),
     color: colors.theme,
     marginVertical: heightPixel(12),

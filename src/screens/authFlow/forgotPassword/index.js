@@ -1,19 +1,21 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
-import { useDispatch } from 'react-redux';
+import React, {useRef, useState, useEffect} from 'react';
+import {View, Text, ActivityIndicator} from 'react-native';
+import {useDispatch} from 'react-redux';
 
 import {
   GreenSnackbar,
   RedSnackbar,
   appIcons,
   colors,
+  heightPixel,
+  routes,
 } from '../../../services';
-import { Global, MyInput } from '../../../components';
-import { styles } from './styles';
+import {Global, MyInput} from '../../../components';
+import {styles} from './styles';
 import Button from '../../../components/button';
-import { isForgotValid } from '../../../services/validations';
+import {isForgotValid} from '../../../services/validations';
 
-const ForgotScreen = ({ navigation }) => {
+const ForgotScreen = ({navigation}) => {
   const statusBar = useRef(null);
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
@@ -31,28 +33,35 @@ const ForgotScreen = ({ navigation }) => {
 
   return (
     <Global
-      isBack={true}
+      paddingHorizontal={true}
       navigation={navigation}
-      loginHeader={true}
-      globalStyle={styles.wrapper}
-      ref={statusBar}>
+      header={true}
+      isBack={true}
+      title={'Forgot Password'}
+      isLoading={isLoading}
+      description={'Hello there, enter email to continue'}
+      ref={statusBar}
+      globalStyle={styles.wrapper}>
       <View>
-        <Text style={styles.heading}>Forgot Password</Text>
-        <Text style={styles.title}>
-          Enter your registered email to receive an OTP code.
-        </Text>
         <MyInput
           leftIcon={appIcons.mailIcon}
           value={email}
           placeHolder={'Enter your email'}
           setValue={setEmail}
           keyboardType={'email-address'}
+          title={'Email Address'}
+          marginTop={heightPixel(6)}
         />
       </View>
       {isLoading ? (
         <ActivityIndicator color={colors.theme} size={'small'} />
       ) : (
-        <Button onPress={() => { }} children={'Continue'} />
+        <Button
+          onPress={() => {
+            navigation.navigate(routes.otpVerfication, {screen: 'forgot'});
+          }}
+          children={'Continue'}
+        />
       )}
     </Global>
   );

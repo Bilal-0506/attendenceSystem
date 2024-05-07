@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   },
   viewOne: {
     alignItems: 'center',
-    marginTop: heightPixel(50),
+    marginTop: heightPixel(20),
     marginBottom: heightPixel(32),
   },
   heading: {

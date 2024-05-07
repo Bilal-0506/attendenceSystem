@@ -7,17 +7,18 @@ import {
   Platform,
   Text,
 } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import { appIcons, colors, fontFamily } from '../../utilities';
-import { heightPixel, widthPixel } from '../../constants';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import { ProfileStack } from '../appFlow/profileStack';
+import {appIcons, colors, fontFamily} from '../../utilities';
+import {heightPixel, widthPixel} from '../../constants';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import {ProfileStack} from '../appFlow/profileStack';
+import {DashboardStack} from '../appFlow/dashboardStack';
 
 const Tab = createBottomTabNavigator();
 
 const TabButton = props => {
-  const { item, onPress, accessibilityState } = props;
+  const {item, onPress, accessibilityState} = props;
   const focused = accessibilityState.selected;
   return (
     <TouchableOpacity
@@ -25,15 +26,18 @@ const TabButton = props => {
       activeOpacity={1}
       style={[styles.container]}>
       <View style={[styles.btn]}>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{alignItems: 'center'}}>
           <Image
             source={focused ? item.active : item.icon}
-            style={[styles.tabIcon]}
+            style={[
+              styles.tabIcon,
+              {tintColor: focused ? colors.theme : colors.inActiveTab},
+            ]}
           />
           <Text
             style={[
               styles.title,
-              { color: focused ? colors.theme : colors.inActiveTab },
+              {color: focused ? colors.theme : colors.inActiveTab},
             ]}>
             {item.name}
           </Text>
@@ -45,30 +49,14 @@ const TabButton = props => {
 
 export function TabNavigator() {
   const tabArray = [
-    // {
-    //   route: 'brokerHome',
-    //   icon: appIcons.tabIconOne,
-    //   active: appIcons.activeTabIconOne,
-    //   component: DashboardStack,
-    //   color: colors.theme,
-    //   name: 'Home',
-    // },
-    // {
-    //   route: 'brokerBooking',
-    //   icon: appIcons.tabIconTwo,
-    //   active: appIcons.activeTabIconTwo,
-    //   component: BookingStack,
-    //   color: colors.theme,
-    //   name: 'Booking',
-    // },
-    // {
-    //   route: 'brokerWholeSale',
-    //   icon: appIcons.tabIconThree,
-    //   active: appIcons.activeTabIconThree,
-    //   component: WholeSaleStack,
-    //   color: colors.theme,
-    //   name: 'WholeSale',
-    // },
+    {
+      route: 'Home',
+      icon: appIcons.tabIconOne,
+      active: appIcons.activeTabIconOne,
+      component: DashboardStack,
+      color: colors.theme,
+      name: 'Home',
+    },
     {
       route: 'profile',
       icon: appIcons.tabIconFour,

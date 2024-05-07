@@ -3,25 +3,12 @@ import React, {
   useState,
   forwardRef,
   useImperativeHandle,
-  useRef,
 } from 'react';
-import {View, StyleSheet, StatusBar, ScrollView} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
 
-import {
-  appIcons,
-  colors,
-  heightPixel,
-  routes,
-  widthPixel,
-} from '../../services';
+import {widthPixel} from '../../services';
 import themeContext from '../../services/config/themeContext';
-import {
-  AppHeader,
-  DashboardHeader,
-  LoginHeader,
-  ProfileHeader,
-  SearchAndFilter,
-} from '..';
+import Header from '../header';
 
 const STYLES = ['dark-content', 'light-content'];
 
@@ -29,19 +16,17 @@ const Global = forwardRef(
   (
     {
       isBack,
+      header,
       children,
       globalStyle,
       navigation,
-      loginHeader,
-      dashboardHeader,
-      appHeader,
+      headerSave,
+      headerSetting,
+      headerTitle,
       title,
-      route,
-      search,
-      searchTop,
-      searchBottom,
-      notification,
-      profileHeader,
+      titleIcon,
+      description,
+      paddingHorizontal,
     },
     ref,
   ) => {
@@ -69,55 +54,28 @@ const Global = forwardRef(
           barStyle={statusBarStyle}
           translucent
         />
-        {dashboardHeader && <DashboardHeader navigation={navigation} />}
-        {loginHeader && (
-          <LoginHeader isBack={isBack} route={route} navigation={navigation} />
-        )}
-        {appHeader && (
-          <AppHeader
+        {header && (
+          <Header
+            navigation={navigation}
             isBack={isBack}
-            notification={notification}
-            route={route}
+            headerSave={headerSave}
+            headerSetting={headerSetting}
+            headerTitle={headerTitle}
             title={title}
-            navigation={navigation}
+            titleIcon={titleIcon}
+            description={description}
           />
         )}
-        {profileHeader && (
-          <ProfileHeader
-            notification={notification}
-            route={route}
-            title={title}
-            navigation={navigation}
-          />
-        )}
-        {search && (
-          <View
-            style={{
-              paddingHorizontal: widthPixel(20),
-              paddingTop: searchTop ? searchTop : heightPixel(20),
-              paddingBottom: searchBottom ? searchBottom : heightPixel(20),
-            }}>
-            <SearchAndFilter
-              placeHolder={'Search...'}
-              leftIcon={appIcons.search}
-              rightIcon={appIcons.filter}
-              onPressView={() => {
-                navigation.navigate(routes.searchAndFilter);
-              }}
-              disable={false}
-              disableLeft={true}
-              disableRight={true}
-            />
-          </View>
-        )}
-        <View style={styles.wrapper}>
-          <ScrollView
-            nestedScrollEnabled={true}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={[styles.scroll, {...globalStyle}]}>
-            {children}
-          </ScrollView>
+
+        <View
+          style={[
+            styles.wrapper,
+            {
+              ...globalStyle,
+              paddingHorizontal: paddingHorizontal ? widthPixel(20) : 0,
+            },
+          ]}>
+          {children}
         </View>
       </View>
     );
@@ -128,16 +86,11 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
-    backgroundColor: colors.white,
+    backgroundColor: '#f5f9ff',
   },
   wrapper: {
     flex: 1,
-    backgroundColor: colors.white,
-  },
-  scroll: {
-    flexGrow: 1,
-    paddingVertical: heightPixel(20),
-    paddingHorizontal: widthPixel(20),
+    backgroundColor: '#f5f9ff',
   },
 });
 

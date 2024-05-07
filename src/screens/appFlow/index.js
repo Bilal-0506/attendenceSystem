@@ -3,6 +3,7 @@ import Dashboard from './dashboard';
 import DeleteAccount from './deleteAccount';
 import EditProfile from './editProfile';
 import Language from './language';
+import AddRequestScreen from './leaveRequestForm';
 import Notification from './notification';
 import Profile from './profile';
 import SearchAndFilterScreen from './searchAndFliter';
@@ -18,4 +19,5 @@ export {
   Settings,
   DeleteAccount,
   Notification,
+  AddRequestScreen,
 };

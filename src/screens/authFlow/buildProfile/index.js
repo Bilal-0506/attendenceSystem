@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, Pressable, Image } from 'react-native';
-import { useDispatch } from 'react-redux';
+import React, {useRef, useEffect, useState} from 'react';
+import {View, Text, ActivityIndicator, Pressable, Image} from 'react-native';
+import {useDispatch} from 'react-redux';
 
 import {
   GreenSnackbar,
@@ -10,23 +10,26 @@ import {
   heightPixel,
   routes,
 } from '../../../services';
-import { Global, MyInput } from '../../../components';
-import { styles } from './styles';
+import {Global, MyInput} from '../../../components';
+import {styles} from './styles';
 import Button from '../../../components/button';
-import { imagePicker } from '../../../services/helpingMethods';
+import {imagePicker} from '../../../services/helpingMethods';
+import {ScrollView} from 'react-native-gesture-handler';
 
-const BuildProfileScreen = ({ navigation, route }) => {
+const BuildProfileScreen = ({navigation, route}) => {
   const statusBar = useRef(null);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [image, setImage] = useState(
     'https://reactnative.dev/img/tiny_logo.png',
   );
 
   useEffect(() => {
     statusBar.current?.darkContent();
-    return () => { };
+    return () => {};
   }, []);
 
   const getImage = async () => {
@@ -40,40 +43,71 @@ const BuildProfileScreen = ({ navigation, route }) => {
 
   return (
     <Global
-      isBack={true}
+      paddingHorizontal={true}
       navigation={navigation}
-      loginHeader={true}
-      globalStyle={styles.wrapper}
-      ref={statusBar}>
-      <View style={{ marginBottom: heightPixel(100) }}>
-        <Text style={styles.heading}>Create Account</Text>
-        <View style={styles.viewOne}>
-          <Pressable onPress={() => getImage()} style={styles.imageView}>
-            <Image
-              source={{ uri: image }}
-              style={styles.imageStyle}
-              borderRadius={100}
-            />
-            <View style={styles.innerImageView}>
-              <View style={styles.cameraView}>
-                <Image style={styles.cameraIcon} source={appIcons.cameraIcon} />
+      header={true}
+      title={'Build Profile'}
+      description={'Hello there, enter your information'}
+      ref={statusBar}
+      globalStyle={styles.wrapper}>
+      <View style={{flex: 1, marginBottom: heightPixel(20)}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{flexGrow: 1}}>
+          <View style={styles.viewOne}>
+            <Pressable onPress={() => getImage()} style={styles.imageView}>
+              <Image
+                source={{uri: image}}
+                style={styles.imageStyle}
+                borderRadius={100}
+              />
+              <View style={styles.innerImageView}>
+                <View style={styles.cameraView}>
+                  <Image
+                    style={styles.cameraIcon}
+                    source={appIcons.cameraIcon}
+                  />
+                </View>
               </View>
-            </View>
-          </Pressable>
-        </View>
-        <MyInput
-          leftIcon={appIcons.mailIcon}
-          value={name}
-          placeHolder={'Enter your name'}
-          setValue={setName}
-          keyboardType={'email-address'}
-          disable={!isLoading}
-        />
+            </Pressable>
+          </View>
+          <MyInput
+            value={firstName}
+            placeHolder={'Enter your first name'}
+            setValue={setFirstName}
+            keyboardType={'email-address'}
+            disable={!isLoading}
+            title={'First Name'}
+            marginTop={heightPixel(6)}
+          />
+          <MyInput
+            value={lastName}
+            placeHolder={'Enter your last name'}
+            setValue={setLastName}
+            keyboardType={'email-address'}
+            disable={!isLoading}
+            title={'Last Name'}
+          />
+          <MyInput
+            value={lastName}
+            placeHolder={'Enter your phone number'}
+            setValue={setLastName}
+            keyboardType={'phone-pad'}
+            disable={!isLoading}
+            title={'Phone Number'}
+          />
+        </ScrollView>
       </View>
       {isLoading ? (
         <ActivityIndicator color={colors.theme} size={'small'} />
       ) : (
-        <Button onPress={() => { }} children={'Update Profile'} />
+        <Button
+          onPress={() => {
+            navigation.navigate(routes.drawer);
+          }}
+          children={'Update Profile'}
+        />
       )}
     </Global>
   );

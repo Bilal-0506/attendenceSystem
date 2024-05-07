@@ -1,178 +1,121 @@
-import React, {useContext} from 'react';
+import React from 'react';
+import {StyleSheet, Image, Text, View, Pressable} from 'react-native';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
+
 import {
-  StyleSheet,
-  Image,
-  Text,
-  View,
-  TouchableOpacity,
-  I18nManager,
-} from 'react-native';
-import {useTranslation} from 'react-i18next';
+  appIcons,
+  colors,
+  fontFamily,
+  heightPixel,
+  widthPixel,
+} from '../../services';
+import {useSelector} from 'react-redux';
 
-import {appIcons, colors, fontFamily, hp, wp} from '../../services';
-import themeContext from '../../services/config/themeContext';
-
-const Header = props => {
-  const theme = useContext(themeContext);
-  const {
-    leftIcon,
-    title,
-    titleStyle,
-    onPress,
-    shadow,
-    rightIcon1,
-    rightIconStyle,
-    fontSize,
-    onpressSearch,
-    bold,
-    searchbackgroundColor,
-    onPressrightIcon2,
-    rightIcon2,
-  } = props;
-  const {t} = useTranslation();
+const Header = ({
+  navigation,
+  isBack,
+  headerTitle,
+  headerSetting,
+  headerSave,
+  title,
+  titleIcon,
+  description,
+}) => {
+  const theme = useSelector(state => state.user.themeColor);
 
   return (
-    <View style={{backgroundColor: 'red'}}>
-      <View
-        style={[
-          styles.container,
-          shadow && styles.shadow,
-          {backgroundColor: theme.background},
-        ]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <TouchableOpacity onPress={onPress}>
-              {leftIcon && (
-                <Image
-                  style={[
-                    styles.iconStyle,
-                    {transform: [{scaleX: I18nManager.isRTL ? -1 : 1}]},
-                  ]}
-                  source={leftIcon}
-                />
-              )}
-            </TouchableOpacity>
-            <View
-              style={[styles.textViewStyle, {marginLeft: leftIcon ? 20 : 0}]}>
-              <Text
-                style={[
-                  titleStyle,
-                  styles.textStyle,
-                  {
-                    color: theme.text,
-                    fontSize: fontSize ? fontSize : 18,
-                    fontFamily: bold
-                      ? fontFamily.appTextBold
-                      : fontFamily.appTextSemiBold,
-                  },
-                ]}>
-                {t(title)}
-              </Text>
-            </View>
-          </View>
-          <View style={[rightIconStyle, {flexDirection: 'row'}]}>
-            {rightIcon1 && (
-              <TouchableOpacity
-                onPress={onpressSearch}
-                style={[
-                  styles.rightIconView,
-                  {marginRight: hp(2), backgroundColor: theme.backgroundTwo},
-                ]}>
-                <Image
-                  style={[
-                    styles.rightIcon,
-                    {
-                      tintColor: theme.color,
-                      transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
-                    },
-                  ]}
-                  source={appIcons.search}
-                />
-              </TouchableOpacity>
-            )}
-            {rightIcon2 && (
-              <TouchableOpacity
-                onPress={onPressrightIcon2}
-                style={[
-                  styles.rightIconView,
-                  {
-                    backgroundColor: searchbackgroundColor
-                      ? searchbackgroundColor
-                      : theme.backgroundTwo,
-                  },
-                ]}>
-                <Image
-                  style={[
-                    styles.rightIcon,
-                    {
-                      tintColor: theme.color,
-                      transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
-                    },
-                  ]}
-                  source={rightIcon2}
-                />
-              </TouchableOpacity>
-            )}
-          </View>
+    <View style={styles.padding}>
+      <View style={[styles.rowAlign, styles.space]}>
+        <View style={styles.rowAlign}>
+          {isBack && (
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={{marginRight: widthPixel(16)}}>
+              <Image
+                source={appIcons.chevronLeftWhite}
+                style={styles.leftIcon}
+              />
+            </Pressable>
+          )}
+          <Text style={styles.headerTitle}>{headerTitle}</Text>
         </View>
+        {headerSetting ? (
+          <Pressable onPress={() => navigation.navigate(headerSetting)}>
+            <Image
+              source={appIcons.settingIcon}
+              style={[styles.rightIcon, {tintColor: theme}]}
+            />
+          </Pressable>
+        ) : headerSave ? (
+          <Pressable onPress={headerSave}>
+            <Text style={[styles.headerTitle, {color: theme}]}>Save</Text>
+          </Pressable>
+        ) : null}
       </View>
+      {title || description ? (
+        <View style={isBack && styles.mt10}>
+          {title && (
+            <View style={[styles.rowAlign]}>
+              <Text style={styles.title}>{title}</Text>
+              <Image style={styles.titleIcon} source={titleIcon} />
+            </View>
+          )}
+          <Text style={[styles.des, title && title && styles.mt10]}>
+            {description}
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  rightIconView: {
-    width: 35,
-    height: 35,
-    borderRadius: 20,
-    backgroundColor: colors.white,
-    justifyContent: 'center',
+  padding: {
+    marginVertical: heightPixel(15),
+    paddingHorizontal: widthPixel(20),
+  },
+  space: {
+    justifyContent: 'space-between',
+  },
+  rowAlign: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  textViewStyle: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 0,
-  },
-  shadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
-  },
-  container: {
-    backgroundColor: colors.white,
-    padding: 10,
-    height: 60,
-    width: wp(100),
-    justifyContent: 'flex-end',
-    paddingHorizontal: wp(5),
-  },
-  textStyle: {
-    fontSize: 20,
-    color: colors.black,
-    fontFamily: fontFamily.appTextSemiBold,
-  },
-  iconStyle: {
-    width: 18,
-    tintColor: colors.theme,
-    height: 18,
+  leftIcon: {
+    height: heightPixel(24),
+    width: widthPixel(24),
     resizeMode: 'contain',
+    tintColor: colors.black,
+  },
+  headerTitle: {
+    fontFamily: fontFamily.appTextSemiBold,
+    color: colors.black,
+    fontSize: responsiveFontSize(2.0),
   },
   rightIcon: {
-    width: 18,
-    height: 18,
+    height: heightPixel(37),
+    width: widthPixel(37),
     resizeMode: 'contain',
+  },
+  mt10: {
+    marginTop: heightPixel(10),
+  },
+  title: {
+    fontFamily: fontFamily.appTextBold,
+    fontSize: responsiveFontSize(3.0),
+    color: colors.black,
+    marginRight: widthPixel(10),
+  },
+  titleIcon: {
+    height: heightPixel(26),
+    width: widthPixel(26),
+    resizeMode: 'contain',
+  },
+  des: {
+    fontFamily: fontFamily.appTextRegular,
+    fontSize: responsiveFontSize(1.75),
+    color: colors.lightText,
+    lineHeight: heightPixel(22),
   },
 });
 export default Header;

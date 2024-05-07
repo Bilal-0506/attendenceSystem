@@ -1,225 +1,168 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {View, Text, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import {useDispatch} from 'react-redux';
 
-import {Global, ListComponent} from '../../../components';
+import {DashboardHeader, Global, ListComponent} from '../../../components';
 import {styles} from './styles';
-import {heightPixel, routes} from '../../../services';
+import {appIcons, heightPixel, hp, routes} from '../../../services';
 
 const Dashboard = ({navigation}) => {
   const statusBar = useRef(null);
-  const [data, setData] = useState([
-    {
-      id: 1,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 2,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 3,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 4,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 5,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 6,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 7,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 8,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 9,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 10,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-  ]);
-  const [dataOne, setDataOne] = useState([
-    {
-      id: 1,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 2,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 3,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 4,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 5,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 6,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 7,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 8,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 9,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-    {
-      id: 10,
-      title: 'Ferrari 1.6 CVT 2002',
-      subTitle: 'RM 700,500',
-      cal: '2002',
-      meter: '9,000 KM',
-      location: 'Kuala Lumpur, Malaysia',
-    },
-  ]);
 
   useEffect(() => {
     statusBar.current?.darkContent();
   }, []);
 
+  const attendenceData = [
+    {
+      heading: 'Check In',
+      time: '07:01 AM',
+      status: 'On Time',
+      image: appIcons.checkIna,
+    },
+    {
+      heading: 'Check Out',
+      time: '07:01 AM',
+      status: 'Go Home',
+      image: appIcons.checkIna,
+    },
+    {
+      heading: 'Break Time',
+      time: '07:01 AM',
+      status: 'AVG Time',
+      image: appIcons.checkIna,
+    },
+    {
+      heading: 'Total Days',
+      time: '07:01 AM',
+      status: 'Working Days',
+      image: appIcons.checkIna,
+    },
+  ];
+  const requestData = [
+    {
+      heading: 'Sick Leave',
+      time: '07:01 AM',
+      status: 'Pending',
+    },
+    {
+      heading: 'Casual Leave',
+      time: '07:01 AM',
+      status: 'Rejected',
+      image: appIcons.checkIna,
+    },
+    {
+      heading: 'Medical Leave',
+      time: '07:01 AM',
+      status: 'Approved',
+      image: appIcons.checkIna,
+    },
+    {
+      heading: 'Medical Leave',
+      time: '07:01 AM',
+      status: 'Approved',
+      image: appIcons.checkIna,
+    },
+  ];
+
+  const Item = ({title, time, status, image}) => (
+    <View style={styles.item}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Image
+          style={{height: hp(3), width: hp(3), resizeMode: 'center'}}
+          source={image}
+        />
+        <Text style={styles.title}>{title}</Text>
+      </View>
+      <Text style={styles.time}>{time}</Text>
+      <Text style={styles.status}>{status}</Text>
+    </View>
+  );
+  const ItemRequest = ({title, time, status, image, index}) => (
+    <View style={styles.itemRequest}>
+      <Text style={styles.title}>{index + 1}</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '80%',
+        }}>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.status1]}>{status}</Text>
+      </View>
+    </View>
+  );
+
   return (
-    <Global
-      search={true}
-      dashboardHeader={true}
-      navigation={navigation}
-      ref={statusBar}>
-      <View>
-        <View style={styles.viewOne}>
+    <Global paddingHorizontal={true} navigation={navigation} ref={statusBar}>
+      <DashboardHeader name={'Hamza'} designation={'UIUX Developer'} />
+      <View style={{flex: 1}}>
+        <View style={styles.attendenceContainer}>
+          <Text style={styles.attendenceHeadingText}>Total Attendence</Text>
+          <View style={{flex: 1}}>
+            <FlatList
+              contentContainerStyle={{flexGrow: 1}}
+              data={attendenceData}
+              keyExtractor={item => item.id}
+              numColumns={2}
+              renderItem={({item}) => (
+                <Item
+                  title={item.heading}
+                  time={item.time}
+                  status={item.status}
+                  image={item.image}
+                />
+              )}
+            />
+          </View>
+        </View>
+        {/* <View style={{height: hp(3)}} /> */}
+        <View style={{marginTop: hp(1)}}>
+          <View style={styles.requestHeader}>
+            <Text style={styles.requestHeading}>Your Requests</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(routes.leaveRequest)}
+              style={styles.viewButton}>
+              <Text style={styles.viewText}>Add Request</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <FlatList
+              data={requestData}
+              keyExtractor={item => item.id}
+              renderItem={({item, index}) => (
+                <ItemRequest
+                  title={item.heading}
+                  index={index}
+                  // time={item.time}
+                  status={item.status}
+                  // image={item.image}
+                />
+              )}
+            />
+          </View>
+        </View>
+
+        {/* <View style={styles.viewOne}>
           <Text style={styles.heading}>Main Cars Listing</Text>
-          <Pressable
-            onPress={() =>
-              navigation.navigate(routes.list, {
-                title: 'Main Cars Listing',
-                data: data,
-              })
-            }>
+          <Pressable>
             <Text style={styles.viewText}>View All</Text>
           </Pressable>
-        </View>
-        <ListComponent
+        </View> */}
+        {/* <ListComponent
           route={routes?.detail}
           list={data.slice(0, 5)}
           navigation={navigation}
           menu={false}
-        />
-        <View style={[styles.viewOne, {marginTop: heightPixel(20)}]}>
-          <Text style={styles.heading}>Wholesale's Price Cars</Text>
-          <Pressable
-            onPress={() =>
-              navigation.navigate(routes.list, {
-                title: 'Wholesale Price Cars',
-                data: dataOne,
-              })
-            }>
-            <Text style={styles.viewText}>View All</Text>
-          </Pressable>
-        </View>
-        <ListComponent
-          route={routes?.detail}
-          list={dataOne.slice(0, 5)}
-          navigation={navigation}
-          menu={false}
-        />
+        /> */}
       </View>
     </Global>
   );
