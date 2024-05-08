@@ -28,6 +28,7 @@ export const styles = StyleSheet.create({
     width: widthPixel(42),
     marginRight: widthPixel(16),
     resizeMode: 'contain',
+    tintColor: colors.theme,
   },
   heading: {
     fontFamily: fontFamily.appTextBold,

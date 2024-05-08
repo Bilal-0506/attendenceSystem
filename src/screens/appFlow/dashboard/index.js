@@ -1,21 +1,13 @@
-import React, {useRef, useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useRef, useEffect} from 'react';
+import {View, Text, Pressable, Image, FlatList} from 'react-native';
 import {useDispatch} from 'react-redux';
 
-import {DashboardHeader, Global, ListComponent} from '../../../components';
+import {Global} from '../../../components';
 import {styles} from './styles';
 import {
   appIcons,
   colors,
   heightPixel,
-  hp,
   routes,
   widthPixel,
 } from '../../../services';
@@ -126,9 +118,9 @@ const Dashboard = ({navigation}) => {
             <Text style={styles.subTitle}>Lead UI/UX designer</Text>
           </View>
         </View>
-        <View>
+        <Pressable onPress={() => navigation.navigate(routes.notification)}>
           <Image style={styles.icon} source={appIcons.notificationIcon} />
-        </View>
+        </Pressable>
       </View>
       <View style={{flex: 1}}>
         <ScrollView

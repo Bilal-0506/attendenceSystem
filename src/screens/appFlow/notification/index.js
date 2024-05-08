@@ -5,6 +5,7 @@ import {appIcons, heightPixel} from '../../../services';
 import {styles} from './styles';
 import {convertDateTime} from '../../../services/helpingMethods';
 import {Global} from '../../../components';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Notification = ({navigation}) => {
   const statusBar = useRef(null);
@@ -65,13 +66,6 @@ const Notification = ({navigation}) => {
       des: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.',
       new: false,
     },
-    {
-      id: 9,
-      title: 'Notification received',
-      createdAt: new Date(),
-      des: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.',
-      new: false,
-    },
   ]);
 
   useEffect(() => {
@@ -83,7 +77,10 @@ const Notification = ({navigation}) => {
       <View key={item.id} style={styles.notifiView}>
         <View style={styles.notiInnerOne}>
           <View style={styles.notiInnerTwo}>
-            <Image style={styles.iconStyle} source={appIcons.notifIcon} />
+            <Image
+              style={styles.iconStyle}
+              source={appIcons.notificationIcon}
+            />
             <View>
               <Text style={styles.heading}>{item?.title}</Text>
               <Text style={styles.time}>
@@ -91,9 +88,6 @@ const Notification = ({navigation}) => {
               </Text>
             </View>
           </View>
-          {item.new != false && (
-            <Image style={styles.iconStyle} source={appIcons.newNotifIcon} />
-          )}
         </View>
         <Text style={styles.des}>{item.des}</Text>
       </View>
@@ -102,17 +96,23 @@ const Notification = ({navigation}) => {
 
   return (
     <Global
-      title={'Notification'}
-      appHeader={true}
+      paddingHorizontal={true}
+      isBack={true}
+      header={true}
+      headerTitle={'Notifications'}
       navigation={navigation}
       ref={statusBar}
       globalStyle={{
         paddingTop: heightPixel(1),
       }}>
-      <View>
-        {notifData?.map((item, index) => (
-          <ItemRender index={index} item={item} />
-        ))}
+      <View style={{flex: 1}}>
+        <ScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          showsVerticalScrollIndicator={false}>
+          {notifData?.map((item, index) => (
+            <ItemRender index={index} item={item} />
+          ))}
+        </ScrollView>
       </View>
     </Global>
   );

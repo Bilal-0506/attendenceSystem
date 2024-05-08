@@ -9,6 +9,7 @@ import {
   Conditions,
   DeleteAccount,
   EditProfile,
+  Notification,
   Settings,
 } from '../../../screens/appFlow';
 
@@ -19,6 +20,7 @@ const DrawerNavigator = () => {
     <Drawer.Navigator
       screenOptions={{gestureEnabled: true, headerShown: false}}>
       <Drawer.Screen name={routes.tab} component={TabNavigator} />
+      <Drawer.Screen name={routes.notification} component={Notification} />
       <Drawer.Screen name={routes.leaveRequest} component={AddRequestScreen} />
       <Drawer.Screen name={routes.editProfile} component={EditProfile} />
       <Drawer.Screen name={routes.settings} component={Settings} />

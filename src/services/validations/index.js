@@ -1,4 +1,3 @@
-import {t} from 'i18next';
 import {RedSnackbar} from '..';
 
 export const emailFormat =
