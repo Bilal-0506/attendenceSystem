@@ -23,6 +23,7 @@ const BuildProfileScreen = ({navigation, route}) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
   const [image, setImage] = useState(
     'https://reactnative.dev/img/tiny_logo.png',
   );
@@ -90,12 +91,19 @@ const BuildProfileScreen = ({navigation, route}) => {
             title={'Last Name'}
           />
           <MyInput
-            value={lastName}
+            value={phoneNumber}
             placeHolder={'Enter your phone number'}
-            setValue={setLastName}
+            setValue={setPhoneNumber}
             keyboardType={'phone-pad'}
             disable={!isLoading}
             title={'Phone Number'}
+          />
+          <MyInput
+            value={address}
+            placeHolder={'Enter your address'}
+            setValue={setAddress}
+            disable={!isLoading}
+            title={'Address'}
           />
         </ScrollView>
       </View>

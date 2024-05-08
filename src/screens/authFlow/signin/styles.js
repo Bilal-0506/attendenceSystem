@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {colors, fontFamily, heightPixel} from '../../../services';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
+
+import {colors, fontFamily, heightPixel} from '../../../services';
 
 export const styles = StyleSheet.create({
   heading: {

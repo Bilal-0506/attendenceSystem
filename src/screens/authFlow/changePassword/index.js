@@ -15,28 +15,14 @@ const ChangePasswordScreen = ({navigation}) => {
   const [secure, setSecure] = useState(true);
   const [newPassword, setNewPassword] = useState('');
   const [newSecure, setNewSecure] = useState(true);
-  const [modal, setModal] = useState(false);
-  var timer;
 
   useEffect(() => {
     statusBar.current?.darkContent();
-    return () => {
-      clearTimeout(timer);
-    };
+    return () => {};
   }, []);
 
   const onPressLogin = () => {
-    if (isChangePasswordValid(password, newPassword)) {
-      setModal(true);
-      modelView();
-    }
-  };
-
-  const modelView = () => {
-    timer = setTimeout(() => {
-      setModal(false);
-      navigation.reset({index: 0, routes: [{name: routes.login}]});
-    }, 1500);
+    navigation.reset({index: 0, routes: [{name: routes.login}]});
   };
 
   return (
@@ -72,13 +58,6 @@ const ChangePasswordScreen = ({navigation}) => {
         />
       </View>
       <Button onPress={() => onPressLogin()} children={'Reset Password'} />
-      {modal && (
-        <ModalComponent
-          modalVisible={modal}
-          title={'Password Updated'}
-          subTitle={'You have successfully update your password!'}
-        />
-      )}
     </Global>
   );
 };

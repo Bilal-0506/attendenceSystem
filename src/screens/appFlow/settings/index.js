@@ -25,12 +25,12 @@ const Settings = ({navigation}) => {
     {
       id: 2,
       title: 'Privacy',
-      route: routes.conditions,
+      route: routes.condtions,
     },
     {
       id: 3,
       title: 'Terms and Condition',
-      route: routes.conditions,
+      route: routes.condtions,
     },
     {
       id: 4,
@@ -45,10 +45,12 @@ const Settings = ({navigation}) => {
 
   return (
     <Global
-      title={'Settings'}
+      isBack={true}
+      paddingHorizontal={true}
+      notification={true}
+      header={true}
+      headerTitle={'Settings'}
       navigation={navigation}
-      appHeader={true}
-      globalStyle={{paddingTop: heightPixel(1)}}
       ref={statusBar}>
       <View>
         {list.map((item, index) => (

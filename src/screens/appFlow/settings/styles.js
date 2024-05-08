@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: widthPixel(10),
-    paddingVertical: heightPixel(10),
+    paddingVertical: heightPixel(16),
     shadowColor: 'rgba(0, 0, 0, 0.3)',
     shadowOffset: {
       width: 0,
@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     elevation: 3,
     borderRadius: widthPixel(12),
     backgroundColor: colors?.white,
-    marginBottom: heightPixel(24),
+    marginBottom: heightPixel(18),
   },
   title: {
     fontFamily: fontFamily.appTextMedium,

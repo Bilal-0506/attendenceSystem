@@ -3,6 +3,21 @@ import {colors, fontFamily, heightPixel, widthPixel} from '../../../services';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
 export const styles = StyleSheet.create({
+  viewOne: {
+    alignItems: 'center',
+    marginBottom: heightPixel(32),
+  },
+  imageView: {
+    alignItems: 'center',
+    height: heightPixel(100),
+    width: widthPixel(100),
+    backgroundColor: colors.inActiveSlide,
+    borderRadius: 50,
+  },
+  imageStyle: {
+    height: heightPixel(100),
+    width: widthPixel(100),
+  },
   dropView: {
     paddingVertical: heightPixel(10),
     borderRadius: widthPixel(12),

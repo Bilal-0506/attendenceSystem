@@ -11,7 +11,15 @@ import {useDispatch} from 'react-redux';
 
 import {DashboardHeader, Global, ListComponent} from '../../../components';
 import {styles} from './styles';
-import {appIcons, heightPixel, hp, routes} from '../../../services';
+import {
+  appIcons,
+  colors,
+  heightPixel,
+  hp,
+  routes,
+  widthPixel,
+} from '../../../services';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Dashboard = ({navigation}) => {
   const statusBar = useRef(null);
@@ -22,147 +30,164 @@ const Dashboard = ({navigation}) => {
 
   const attendenceData = [
     {
+      id: 1,
       heading: 'Check In',
       time: '07:01 AM',
       status: 'On Time',
       image: appIcons.checkIna,
     },
     {
+      id: 2,
       heading: 'Check Out',
       time: '07:01 AM',
       status: 'Go Home',
       image: appIcons.checkIna,
     },
     {
+      id: 3,
       heading: 'Break Time',
       time: '07:01 AM',
       status: 'AVG Time',
       image: appIcons.checkIna,
     },
     {
+      id: 4,
       heading: 'Total Days',
       time: '07:01 AM',
       status: 'Working Days',
       image: appIcons.checkIna,
     },
   ];
+
   const requestData = [
+    {id: 1, heading: 'Sick Leave', time: '07:01 AM', status: 'Pending'},
     {
-      heading: 'Sick Leave',
-      time: '07:01 AM',
-      status: 'Pending',
-    },
-    {
+      id: 2,
       heading: 'Casual Leave',
       time: '07:01 AM',
       status: 'Rejected',
-      image: appIcons.checkIna,
     },
-    {
-      heading: 'Medical Leave',
-      time: '07:01 AM',
-      status: 'Approved',
-      image: appIcons.checkIna,
-    },
-    {
-      heading: 'Medical Leave',
-      time: '07:01 AM',
-      status: 'Approved',
-      image: appIcons.checkIna,
-    },
+    {id: 3, heading: 'Medical Leave', time: '07:01 AM', status: 'Approved'},
+    {id: 4, heading: 'Medical Leave', time: '07:01 AM', status: 'Approved'},
+    {id: 5, heading: 'Medical Leave', time: '07:01 AM', status: 'Approved'},
+    {id: 6, heading: 'Medical Leave', time: '07:01 AM', status: 'Approved'},
   ];
 
-  const Item = ({title, time, status, image}) => (
-    <View style={styles.item}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image
-          style={{height: hp(3), width: hp(3), resizeMode: 'center'}}
-          source={image}
-        />
-        <Text style={styles.title}>{title}</Text>
-      </View>
-      <Text style={styles.time}>{time}</Text>
-      <Text style={styles.status}>{status}</Text>
+  const Item = ({title, time, status, image, index}) => (
+    <View key={index} style={styles.boxConatiner}>
+      <Image
+        style={{...styles.icon, marginBottom: heightPixel(12)}}
+        source={image}
+      />
+      <Text style={{...styles.title, marginBottom: heightPixel(6)}}>
+        {title}
+      </Text>
+      <Text
+        style={{
+          ...styles.subHeading,
+          marginBottom: heightPixel(4),
+          color: colors.theme,
+        }}>
+        {time}
+      </Text>
+      <Text style={styles.subTitleOne}>{status}</Text>
     </View>
   );
-  const ItemRequest = ({title, time, status, image, index}) => (
-    <View style={styles.itemRequest}>
-      <Text style={styles.title}>{index + 1}</Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          width: '80%',
-        }}>
+
+  const ItemRequest = ({title, status, index}) => (
+    <View key={index} style={styles.leaveView}>
+      <View style={styles.rowAlign}>
+        <Text style={{...styles.title, marginRight: widthPixel(8)}}>
+          {index + 1}.
+        </Text>
         <Text style={styles.title}>{title}</Text>
-        <Text style={[styles.status1]}>{status}</Text>
       </View>
+      <Text style={[styles.subTitle]}>{status}</Text>
     </View>
   );
 
   return (
-    <Global paddingHorizontal={true} navigation={navigation} ref={statusBar}>
-      <DashboardHeader name={'Hamza'} designation={'UIUX Developer'} />
+    <Global
+      paddingHorizontal={true}
+      navigation={navigation}
+      ref={statusBar}
+      globalStyle={styles.paddingTop}>
+      <View style={{...styles.row, marginBottom: heightPixel(20)}}>
+        <View style={styles.rowAlign}>
+          <Image
+            source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}}
+            style={styles.profile}
+          />
+          <View>
+            <View style={[styles.row, styles.mb5]}>
+              <Text style={styles.title}>Muhammad Bilal</Text>
+              <Image source={appIcons.handIcon} style={styles.handIcon} />
+            </View>
+            <Text style={styles.subTitle}>Lead UI/UX designer</Text>
+          </View>
+        </View>
+        <View>
+          <Image style={styles.icon} source={appIcons.notificationIcon} />
+        </View>
+      </View>
       <View style={{flex: 1}}>
-        <View style={styles.attendenceContainer}>
-          <Text style={styles.attendenceHeadingText}>Total Attendence</Text>
-          <View style={{flex: 1}}>
+        <ScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          showsVerticalScrollIndicator={false}>
+          <View style={{flex: 1.3}}>
             <FlatList
-              contentContainerStyle={{flexGrow: 1}}
+              columnWrapperStyle={{
+                justifyContent: 'space-between',
+              }}
+              scrollEnabled={false}
               data={attendenceData}
               keyExtractor={item => item.id}
               numColumns={2}
-              renderItem={({item}) => (
+              renderItem={({item, index}) => (
                 <Item
                   title={item.heading}
                   time={item.time}
                   status={item.status}
                   image={item.image}
+                  index={index}
                 />
               )}
             />
           </View>
-        </View>
-        {/* <View style={{height: hp(3)}} /> */}
-        <View style={{marginTop: hp(1)}}>
-          <View style={styles.requestHeader}>
-            <Text style={styles.requestHeading}>Your Requests</Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate(routes.leaveRequest)}
-              style={styles.viewButton}>
-              <Text style={styles.viewText}>Add Request</Text>
-            </TouchableOpacity>
-          </View>
-          <View>
+          <View style={{flex: 1}}>
+            <View
+              style={{
+                ...styles.row,
+                marginBottom: heightPixel(18),
+                marginTop: heightPixel(4),
+              }}>
+              <Text style={styles.heading}>Leaves</Text>
+              <Text
+                onPress={() => navigation.navigate(routes.leaveRequest)}
+                style={{
+                  ...styles.subHeading,
+                  color: colors.theme,
+                  textDecorationLine: 'underline',
+                  textDecorationColor: colors.theme,
+                }}>
+                Request Leave
+              </Text>
+            </View>
             <FlatList
+              contentContainerStyle={{flexGrow: 1}}
               data={requestData}
+              scrollEnabled={false}
               keyExtractor={item => item.id}
               renderItem={({item, index}) => (
                 <ItemRequest
                   title={item.heading}
                   index={index}
-                  // time={item.time}
                   status={item.status}
-                  // image={item.image}
                 />
               )}
             />
           </View>
-        </View>
-
-        {/* <View style={styles.viewOne}>
-          <Text style={styles.heading}>Main Cars Listing</Text>
-          <Pressable>
-            <Text style={styles.viewText}>View All</Text>
-          </Pressable>
-        </View> */}
-        {/* <ListComponent
-          route={routes?.detail}
-          list={data.slice(0, 5)}
-          navigation={navigation}
-          menu={false}
-        /> */}
+        </ScrollView>
       </View>
     </Global>
   );

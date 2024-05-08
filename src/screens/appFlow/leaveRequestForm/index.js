@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import {useDispatch} from 'react-redux';
 
 import {heightPixel} from '../../../services';
-import {Global, MyInput} from '../../../components';
+import {DropDown, Global, MyInput} from '../../../components';
 import {styles} from './styles';
 import Button from '../../../components/button';
 import {isSignupValid} from '../../../services/validations';
@@ -14,6 +14,12 @@ const AddRequestScreen = ({navigation}) => {
   const statusBar = useRef(null);
   const [date, setDate] = useState(new Date().toLocaleDateString());
   const [type, setType] = useState('');
+  const [typesOfLeave, settypesOfLeave] = useState([
+    'Casual',
+    'Aunal',
+    'Medical',
+  ]);
+  const [display, setDisplay] = useState(false);
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,13 +55,14 @@ const AddRequestScreen = ({navigation}) => {
             title={'Date'}
             marginTop={heightPixel(6)}
           />
-          <MyInput
-            value={type}
-            placeHolder={'Enter your last name'}
-            setValue={setType}
-            keyboardType={'email-address'}
-            disable={!isLoading}
+          <DropDown
             title={'Type of Leave'}
+            val={type}
+            setVal={setType}
+            list={typesOfLeave}
+            placeholder={'Select the type of leave'}
+            visible={display}
+            setVisible={setDisplay}
           />
           <MyInput
             value={description}
@@ -63,7 +70,7 @@ const AddRequestScreen = ({navigation}) => {
             setValue={setDescription}
             keyboardType={'email-address'}
             disable={!isLoading}
-            title={'Rease of Leave'}
+            title={'Reason of Leave'}
           />
         </ScrollView>
       </View>

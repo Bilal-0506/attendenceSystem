@@ -24,11 +24,9 @@ export const routes = {
   // DashBoard Broker
   dashboard: 'dashboard',
   leaveRequest: 'leaveRequest',
-  booking: 'booking',
-  wholeSale: 'wholeSale',
+  condtions: 'conditions',
 
   profile: 'profile',
-  searchAndFilter: 'searchAndFilter',
   editProfile: 'editProfile',
   settings: 'settings',
   ChangePassord: 'ChangePassord',

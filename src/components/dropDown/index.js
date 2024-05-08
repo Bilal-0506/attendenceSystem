@@ -21,50 +21,47 @@ export default function DropDown({
 }) {
   return (
     <View>
-      {title && <Text style={styles.title}>{title}</Text>}
-      <Pressable
-        onPress={() => setVisible(!visible)}
-        style={[
-          styles.drop,
-          {
-            marginTop: title ? heightPixel(8) : heightPixel(0),
-            backgroundColor: title
-              ? colors.inputColor
-              : val == ''
-              ? colors.inputColor
-              : colors.theme,
-          },
-        ]}>
-        <Text
+      <View style={styles.container}>
+        {title && <Text style={styles.title}>{title}</Text>}
+        <Pressable
+          onPress={() => setVisible(!visible)}
           style={[
-            styles.subTitle,
+            styles.drop,
             {
-              fontFamily: title
-                ? fontFamily.appTextRegular
-                : fontFamily.appTextSemiBold,
-              color: title
-                ? colors.placeHolderColor
-                : val == ''
-                ? colors.placeHolderColor
-                : colors.white,
+              marginTop: title ? heightPixel(8) : heightPixel(0),
             },
           ]}>
-          {val ? val : placeholder}
-        </Text>
-        <Image
-          source={appIcons.chevronDownIcon}
-          style={[
-            styles.imageStyle,
-            {
-              tintColor: title
-                ? colors.placeHolderColor
-                : val == ''
-                ? colors.placeHolderColor
-                : colors.white,
-            },
-          ]}
-        />
-      </Pressable>
+          <Text
+            style={[
+              styles.subTitle,
+              {
+                fontFamily: title
+                  ? fontFamily.appTextRegular
+                  : fontFamily.appTextSemiBold,
+                color: title
+                  ? colors.black
+                  : val == ''
+                  ? colors.placeHolderColor
+                  : colors.white,
+              },
+            ]}>
+            {val ? val : placeholder}
+          </Text>
+          <Image
+            source={appIcons.chevronDownIcon}
+            style={[
+              styles.imageStyle,
+              {
+                tintColor: title
+                  ? colors.placeHolderColor
+                  : val == ''
+                  ? colors.placeHolderColor
+                  : colors.white,
+              },
+            ]}
+          />
+        </Pressable>
+      </View>
       {visible && (
         <View style={styles.option}>
           {list?.map((item, index) => (
@@ -95,25 +92,32 @@ export default function DropDown({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: heightPixel(24),
+    width: '100%',
+    borderRadius: widthPixel(10),
+    paddingHorizontal: widthPixel(12),
+    borderWidth: widthPixel(1),
+    borderColor: colors.theme,
+    paddingTop: heightPixel(12),
+    paddingBottom: heightPixel(4),
+  },
   title: {
-    fontFamily: fontFamily.appTextSemiBold,
-    fontSize: responsiveFontSize(1.75),
-    color: colors.black,
+    fontFamily: fontFamily.appTextRegular,
+    fontSize: responsiveFontSize(1.5),
+    color: colors.theme,
   },
   drop: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: widthPixel(10),
-    paddingVertical: heightPixel(10),
-    borderRadius: widthPixel(12),
+    height: heightPixel(35),
   },
   option: {
-    justifyContent: 'space-between',
-    paddingHorizontal: widthPixel(10),
-    paddingVertical: heightPixel(10),
-    backgroundColor: colors.inputColor,
     marginTop: heightPixel(8),
+    backgroundColor: colors.lightBackground,
+    paddingHorizontal: widthPixel(12),
+    paddingVertical: heightPixel(12),
     borderRadius: widthPixel(12),
   },
   subTitle: {

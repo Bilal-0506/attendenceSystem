@@ -4,12 +4,14 @@ import {useDispatch} from 'react-redux';
 
 import {Global} from '../../../components';
 import {styles} from './styles';
-import {appIcons, routes, widthPixel} from '../../../services';
+import {appIcons, heightPixel, routes, widthPixel} from '../../../services';
 import {userDataSave} from '../../../redux/Slices/userDataSlice';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Profile = ({navigation}) => {
   const dispatch = useDispatch();
   const statusBar = useRef(null);
+  const [image, setImage] = useState(appIcons.carImage);
   const [list, setlist] = useState([
     {
       id: 1,
@@ -37,31 +39,8 @@ const Profile = ({navigation}) => {
     },
     {
       id: 2,
-      title: 'Profile Type',
-      item: [{id: 1, icon: appIcons.profileIcon, title: 'Switch', route: ''}],
-    },
-    {
-      id: 3,
-      title: 'Support',
-      item: [
-        {
-          id: 1,
-          icon: appIcons.questionIcon,
-          title: 'Dispute',
-          route: routes.dispute,
-        },
-      ],
-    },
-    {
-      id: 4,
       title: 'Actions',
       item: [
-        {
-          id: 1,
-          icon: appIcons.worldIcon,
-          title: 'Language',
-          route: routes.language,
-        },
         {
           id: 2,
           icon: appIcons.logoutIcon,
@@ -83,52 +62,72 @@ const Profile = ({navigation}) => {
 
   return (
     <Global
+      paddingHorizontal={true}
       notification={true}
-      profileHeader={true}
+      header={true}
+      headerTitle={'User Profile'}
       navigation={navigation}
       ref={statusBar}>
-      <View>
-        {list?.map((item, index) => (
-          <View key={item.id}>
-            <Text style={styles.title}>{item.title}</Text>
-            <View style={styles.dropView}>
-              {item?.item?.map((data, index) => (
-                <Pressable
-                  onPress={() => {
-                    data.title == 'Logout'
-                      ? onPress()
-                      : data.title == 'Profile Type'
-                      ? ''
-                      : navigation.navigate(data?.route);
-                  }}
-                  key={data.id}
-                  style={[
-                    styles.rowSpace,
-                    {
-                      borderBottomWidth:
-                        index == item?.item?.length - 1
-                          ? widthPixel(0)
-                          : widthPixel(1),
-                    },
-                  ]}>
-                  <View style={styles.row}>
-                    <Image source={data?.icon} style={styles.leftIcon} />
-                    <Text style={styles.subTitle}>{data?.title}</Text>
-                  </View>
-                  <View style={styles.row}>
-                    {data.title == 'Language' && (
-                      <Text style={styles.langText}>English</Text>
-                    )}
-                    <Image
-                      source={appIcons.chevronRightIcon}
-                      style={styles.rightIcon}
-                    />
-                  </View>
-                </Pressable>
-              ))}
+      <View style={styles.viewOne}>
+        <Pressable style={styles.imageView}>
+          <Image source={image} style={styles.imageView} borderRadius={100} />
+        </Pressable>
+        <Text
+          style={{
+            ...styles.title,
+            marginTop: heightPixel(8),
+            marginBottom: heightPixel(6),
+          }}>
+          Muhammad Bilal
+        </Text>
+        <Text style={{...styles.subTitle}}>burnash057@gmail.com</Text>
+      </View>
+      <View style={{flex: 1}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{flexGrow: 1}}>
+          {list?.map((item, index) => (
+            <View key={item.id}>
+              <Text style={styles.title}>{item.title}</Text>
+              <View style={styles.dropView}>
+                {item?.item?.map((data, index) => (
+                  <Pressable
+                    onPress={() => {
+                      data.title == 'Logout'
+                        ? onPress()
+                        : data.title == 'Profile Type'
+                        ? ''
+                        : navigation.navigate(data?.route);
+                    }}
+                    key={data.id}
+                    style={[
+                      styles.rowSpace,
+                      {
+                        borderBottomWidth:
+                          index == item?.item?.length - 1
+                            ? widthPixel(0)
+                            : widthPixel(1),
+                      },
+                    ]}>
+                    <View style={styles.row}>
+                      <Image source={data?.icon} style={styles.leftIcon} />
+                      <Text style={styles.subTitle}>{data?.title}</Text>
+                    </View>
+                    <View style={styles.row}>
+                      {data.title == 'Language' && (
+                        <Text style={styles.langText}>English</Text>
+                      )}
+                      <Image
+                        source={appIcons.chevronRightIcon}
+                        style={styles.rightIcon}
+                      />
+                    </View>
+                  </Pressable>
+                ))}
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
+        </ScrollView>
       </View>
     </Global>
   );

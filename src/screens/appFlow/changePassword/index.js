@@ -7,6 +7,7 @@ import {styles} from './styles';
 import {appIcons, heightPixel} from '../../../services';
 import {isChangePasswordValid} from '../../../services/validations';
 import Button from '../../../components/button';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const ChangePassord = ({navigation}) => {
   const statusBar = useRef(null);
@@ -14,77 +15,69 @@ const ChangePassord = ({navigation}) => {
   const [secure, setSecure] = useState(true);
   const [newPassword, setNewPassword] = useState('');
   const [newSecure, setNewSecure] = useState(true);
-  const [modal, setModal] = useState(false);
-  var timer;
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmSecure, setConfirmSecure] = useState(true);
 
   useEffect(() => {
     statusBar.current?.darkContent();
-    return () => {
-      clearTimeout(timer);
-    };
+    return () => {};
   }, []);
 
   const onPress = () => {
-    if (isChangePasswordValid(password, newPassword)) {
-      setModal(true);
-      modelView();
-    }
-  };
-
-  const modelView = () => {
-    timer = setTimeout(() => {
-      setModal(false);
-      navigation.goBack();
-    }, 1500);
+    navigation.goBack();
   };
 
   return (
     <Global
-      title={'Change Password'}
+      paddingHorizontal={true}
+      header={true}
+      isBack={true}
+      headerTitle={'Change Password'}
       navigation={navigation}
       appHeader={true}
       globalStyle={{
-        paddingTop: heightPixel(1),
         justifyContent: 'space-between',
       }}
       ref={statusBar}>
-      <View>
-        <Text style={styles.title}>
-          To change your password please provide the fill the following details
-        </Text>
-        <View style={styles.viewOne}>
-          <Text style={styles.heading}>Current Password</Text>
+      <View style={{flex: 1, marginBottom: heightPixel(20)}}>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{flexGrow: 1}}>
+          <Text style={styles.title}>
+            To change your password please provide the fill the following
+            details
+          </Text>
           <MyInput
-            marginTop={heightPixel(8)}
             value={password}
-            placeHolder={'New Password'}
+            placeHolder={'Enter your current password'}
             setValue={setPassword}
             secure={secure}
             onPressRight={() => setSecure(!secure)}
             rightIcon={secure ? appIcons.eyeCloseIcon : appIcons.eyeIcon}
+            title={'Current Password'}
           />
-        </View>
-        <View style={styles.viewTwo}>
-          <Text style={styles.heading}>New Password</Text>
           <MyInput
             value={newPassword}
-            marginTop={heightPixel(8)}
-            placeHolder={'Confirm Password'}
+            placeHolder={'Enter your new password'}
             setValue={setNewPassword}
             secure={newSecure}
             onPressRight={() => setNewSecure(!newSecure)}
             rightIcon={newSecure ? appIcons.eyeCloseIcon : appIcons.eyeIcon}
+            title={'New Password'}
           />
-        </View>
+          <MyInput
+            value={confirmPassword}
+            placeHolder={'Re-enter your password'}
+            setValue={setConfirmPassword}
+            secure={confirmSecure}
+            onPressRight={() => setConfirmSecure(!newSecure)}
+            rightIcon={confirmSecure ? appIcons.eyeCloseIcon : appIcons.eyeIcon}
+            title={'Confrim Password'}
+          />
+        </ScrollView>
       </View>
       <Button onPress={() => onPress()} children={'Save Changes'} />
-      {modal && (
-        <ModalComponent
-          modalVisible={modal}
-          title={'Password Changed'}
-          subTitle={'You have successfully changed your password!'}
-        />
-      )}
     </Global>
   );
 };
