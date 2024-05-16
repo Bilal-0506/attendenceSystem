@@ -1,13 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Text } from 'react-native';
 
-import { appIcons, colors, fontFamily, routes } from '../../../services';
+import { routes } from '../../../services';
 import { styles } from './styles';
 import { Global } from '../../../components';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { useSelector } from 'react-redux';
 
 const Splash = ({ navigation }) => {
   const statusBar = useRef(null);
+  const user = useSelector(state => state.user)
 
   React.useEffect(() => {
     performTimeConsumingTask();
@@ -15,10 +16,22 @@ const Splash = ({ navigation }) => {
   }, []);
 
   const performTimeConsumingTask = async () => {
-    return new Promise(resolve =>
+    return new Promise((resolve) =>
       setTimeout(() => {
-        navigation.replace(routes.onBoarding);
-      }, 4000),
+        if (user?.userData) {
+          if (user?.userData?.profileCompleted) {
+            navigation.reset({ index: 0, routes: [{ name: routes.drawer }] });
+          } else {
+            navigation.replace(routes?.buildProfile);
+          }
+        } else {
+          if (!user?.isSurvey) {
+            navigation.replace(routes?.onBoarding);
+          } else {
+            navigation.replace(routes?.login);
+          }
+        }
+      }, 3500)
     );
   };
 

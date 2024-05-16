@@ -1,8 +1,9 @@
 import { BASE_URL } from './Environment'
 import { getDeviceId } from 'react-native-device-info';
 import { store } from '../redux/store';
+import NetworkUtils from '../services/helpingMethods';
+import { RedSnackbar } from '../services';
 import { accessToken } from '../redux/Slices/userDataSlice';
-import NetworkUtils, { RedSnackbar } from '../services/helpingMethods';
 
 export const AUTHORIZE = 'AUTHORIZE'
 export const NETWORK_ERROR = 'NETWORK ERROR'
@@ -37,8 +38,8 @@ export const callApi = async (
 ) => {
     const isConnected = await NetworkUtils.isNetworkAvailable()
     if (isConnected) {
-        let token = store.getState().userData.accessToken ?? false;
-        let refreshToken = store.getState().userData.refreshToken ?? false;
+        let token = store.getState().user.accessToken ?? false;
+        let refreshToken = store.getState().user.refreshToken ?? false;
         let url = BASE_URL + endPoint
         if (multipart) {
             defaultHeaders['Content-Type'] = 'multipart/form-data';
@@ -76,7 +77,6 @@ export const callApi = async (
                         },
                     }),
                 };
-
                 await fetch(`${BASE_URL}user/refresh/${refreshToken}`, fetchObject)
                     .then(async res => {
                         let resJson = await res.json();
@@ -102,7 +102,6 @@ export const callApi = async (
     }
     else {
         onError('No internet connection');
-        RedSnackbar('No internet connection');
     }
 };
 

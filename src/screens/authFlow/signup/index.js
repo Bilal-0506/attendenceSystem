@@ -1,19 +1,20 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {View, Text} from 'react-native';
-import {useDispatch} from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { getDeviceId } from 'react-native-device-info';
 
-import {appIcons, colors, heightPixel, routes} from '../../../services';
-import {Global, MyInput} from '../../../components';
-import {styles} from './styles';
+import { GreenSnackbar, RedSnackbar, appIcons, colors, heightPixel, routes } from '../../../services';
+import { Global, MyInput } from '../../../components';
+import { styles } from './styles';
 import Button from '../../../components/button';
-import {isSignupValid} from '../../../services/validations';
-import {ScrollView} from 'react-native-gesture-handler';
+import { isSignupValid } from '../../../services/validations';
+import { ScrollView } from 'react-native-gesture-handler';
+import { api } from '../../../network/Environment';
+import { Method, callApi } from '../../../network/NetworkManger';
 
-const SignupScreen = ({navigation}) => {
+const SignupScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const statusBar = useRef(null);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -27,7 +28,42 @@ const SignupScreen = ({navigation}) => {
 
   const onPressSignup = () => {
     if (isSignupValid(email, password, confirmPassword)) {
-      setIsLoading(true);
+      signupApi();
+    }
+  };
+
+  const signupApi = async () => {
+    setIsLoading(true);
+    let body = {
+      email: email.toLowerCase().trim(),
+      password: password,
+      device: { id: getDeviceId(), deviceToken: "web" },
+    };
+    try {
+      const endPoint = api.signup;
+      await callApi(
+        Method.POST,
+        endPoint,
+        body,
+        (res) => {
+          if (res?.status == 200 && res?.success) {
+            navigation.replace(routes?.otp, {
+              screen: "signup",
+              email: email.toLowerCase().trim(),
+            });
+            GreenSnackbar(res?.message);
+            setIsLoading(false);
+          }
+        },
+        (err) => {
+          console.error(err);
+          RedSnackbar(err.message);
+          setIsLoading(false);
+        }
+      );
+    } catch (error) {
+      console.log("error", error);
+      setIsLoading(false);
     }
   };
 
@@ -38,31 +74,13 @@ const SignupScreen = ({navigation}) => {
       header={true}
       title={'Register Account'}
       titleIcon={appIcons.handIcon}
-      isLoading={isLoading}
       description={'Hello there, register to continue'}
       ref={statusBar}>
-      <View style={{flex: 1, marginBottom: heightPixel(20)}}>
+      <View style={{ flex: 1, marginBottom: heightPixel(20) }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{flexGrow: 1}}>
-          <MyInput
-            value={firstName}
-            placeHolder={'Enter your first name'}
-            setValue={setFirstName}
-            keyboardType={'email-address'}
-            disable={!isLoading}
-            title={'First Name'}
-            marginTop={heightPixel(6)}
-          />
-          <MyInput
-            value={lastName}
-            placeHolder={'Enter your last name'}
-            setValue={setLastName}
-            keyboardType={'email-address'}
-            disable={!isLoading}
-            title={'Last Name'}
-          />
+          contentContainerStyle={{ flexGrow: 1 }}>
           <MyInput
             value={email}
             placeHolder={'Enter your email'}
@@ -92,21 +110,24 @@ const SignupScreen = ({navigation}) => {
             title={'ConfirmPassword'}
           />
           <View style={styles.rowSpace}>
-            <Text
+            <Text disabled={isLoading}
               onPress={() => navigation.navigate(routes.login)}
               style={styles.forgot}>
               Already have an account?
-              <Text style={{color: colors.theme}}> Login</Text>
+              <Text style={{ color: colors.theme }}> Login</Text>
             </Text>
           </View>
         </ScrollView>
       </View>
-      <Button
-        onPress={() => {
-          navigation.navigate(routes?.otpVerfication, {screen: 'signup'});
-        }}
-        children={'Register'}
-      />
+      {isLoading ? (
+        <ActivityIndicator style={{ marginBottom: heightPixel(20) }} color={colors.theme} size={'small'} />
+      ) : (
+        <Button
+          onPress={() => onPressSignup()
+          }
+          children={'Register'}
+        />
+      )}
     </Global>
   );
 };

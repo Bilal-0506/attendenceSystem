@@ -1,4 +1,4 @@
-import {RedSnackbar} from '..';
+import { RedSnackbar } from '..';
 
 export const emailFormat =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -71,28 +71,28 @@ export const isChangePasswordValid = (password, newPassword) => {
   return true;
 };
 
-export const isEditValid = (image, name, address) => {
+export const isEditValid = (image, firstName, lastName, phoneNumber, address) => {
   if (image == null) {
     RedSnackbar('Image required');
     return false;
   }
-  if (name == '') {
-    RedSnackbar('Name required');
+  if (firstName == '') {
+    RedSnackbar('First name required');
+    return false;
+  }
+  if (lastName == '') {
+    RedSnackbar('Last name required');
+    return false;
+  }
+  if (phoneNumber == '') {
+    RedSnackbar('Phone number required');
+    return false;
+  }
+  if (/^\d+$/.test(phoneNumber)) {
+    RedSnackbar('Phone number only contains numbers');
     return false;
   }
   if (address == '') {
-    RedSnackbar('Address required');
-    return false;
-  }
-  return true;
-};
-
-export const isDisputeValid = (email, description) => {
-  if (!emailFormat.test(email)) {
-    RedSnackbar('Enter valid email address');
-    return false;
-  }
-  if (description == '') {
     RedSnackbar('Address required');
     return false;
   }
@@ -109,52 +109,4 @@ export const isDeleteValid = password => {
   return true;
 };
 
-export const isInfotmationValid = (
-  companyName,
-  workerName,
-  phoneNumber,
-  email,
-  date,
-) => {
-  if (companyName == '') {
-    RedSnackbar('Enter valid company name');
-    return false;
-  }
-  if (workerName == '') {
-    RedSnackbar('Enter valid worker name');
-    return false;
-  }
-  if (isNaN(phoneNumber)) {
-    RedSnackbar('Phone number only numbers');
-    return false;
-  }
-  if (!emailFormat.test(email)) {
-    RedSnackbar('Enter valid email address');
-    return false;
-  }
-  if (date == '') {
-    RedSnackbar('Select the valid date');
-    return false;
-  }
-  return true;
-};
 
-export const isScheduleValid = (date, time, note) => {
-  if (date == '' && time == '' && note == '') {
-    RedSnackbar('Required');
-    return false;
-  }
-  if (date == '') {
-    RedSnackbar('Select the valid date');
-    return false;
-  }
-  if (time == '') {
-    RedSnackbar('Select the valid time');
-    return false;
-  }
-  if (note == '') {
-    RedSnackbar('Notes require');
-    return false;
-  }
-  return true;
-};
