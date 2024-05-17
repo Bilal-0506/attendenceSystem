@@ -1,18 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { getDeviceId } from 'react-native-device-info';
+import React, {useState, useEffect, useRef} from 'react';
+import {View, Text, ActivityIndicator} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {getDeviceId} from 'react-native-device-info';
 
-import { GreenSnackbar, RedSnackbar, appIcons, colors, heightPixel, routes } from '../../../services';
-import { Global, MyInput } from '../../../components';
-import { styles } from './styles';
+import {
+  GreenSnackbar,
+  RedSnackbar,
+  appIcons,
+  colors,
+  heightPixel,
+  routes,
+} from '../../../services';
+import {Global, MyInput} from '../../../components';
+import {styles} from './styles';
 import Button from '../../../components/button';
-import { isSignupValid } from '../../../services/validations';
-import { ScrollView } from 'react-native-gesture-handler';
-import { api } from '../../../network/Environment';
-import { Method, callApi } from '../../../network/NetworkManger';
+import {isSignupValid} from '../../../services/validations';
+import {ScrollView} from 'react-native-gesture-handler';
+import {api} from '../../../network/Environment';
+import {Method, callApi} from '../../../network/NetworkManger';
 
-const SignupScreen = ({ navigation, route }) => {
+const SignupScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
   const statusBar = useRef(null);
   const [email, setEmail] = useState('');
@@ -37,7 +44,7 @@ const SignupScreen = ({ navigation, route }) => {
     let body = {
       email: email.toLowerCase().trim(),
       password: password,
-      device: { id: getDeviceId(), deviceToken: "web" },
+      device: {id: getDeviceId(), deviceToken: 'web'},
     };
     try {
       const endPoint = api.signup;
@@ -45,24 +52,21 @@ const SignupScreen = ({ navigation, route }) => {
         Method.POST,
         endPoint,
         body,
-        (res) => {
+        res => {
           if (res?.status == 200 && res?.success) {
-            navigation.replace(routes?.otp, {
-              screen: "signup",
-              email: email.toLowerCase().trim(),
-            });
+            navigation.replace(routes?.buildProfile);
             GreenSnackbar(res?.message);
             setIsLoading(false);
           }
         },
-        (err) => {
+        err => {
           console.error(err);
           RedSnackbar(err.message);
           setIsLoading(false);
-        }
+        },
       );
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       setIsLoading(false);
     }
   };
@@ -76,11 +80,11 @@ const SignupScreen = ({ navigation, route }) => {
       titleIcon={appIcons.handIcon}
       description={'Hello there, register to continue'}
       ref={statusBar}>
-      <View style={{ flex: 1, marginBottom: heightPixel(20) }}>
+      <View style={{flex: 1, marginBottom: heightPixel(20)}}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ flexGrow: 1 }}>
+          contentContainerStyle={{flexGrow: 1}}>
           <MyInput
             value={email}
             placeHolder={'Enter your email'}
@@ -110,23 +114,24 @@ const SignupScreen = ({ navigation, route }) => {
             title={'ConfirmPassword'}
           />
           <View style={styles.rowSpace}>
-            <Text disabled={isLoading}
+            <Text
+              disabled={isLoading}
               onPress={() => navigation.navigate(routes.login)}
               style={styles.forgot}>
               Already have an account?
-              <Text style={{ color: colors.theme }}> Login</Text>
+              <Text style={{color: colors.theme}}> Login</Text>
             </Text>
           </View>
         </ScrollView>
       </View>
       {isLoading ? (
-        <ActivityIndicator style={{ marginBottom: heightPixel(20) }} color={colors.theme} size={'small'} />
-      ) : (
-        <Button
-          onPress={() => onPressSignup()
-          }
-          children={'Register'}
+        <ActivityIndicator
+          style={{marginBottom: heightPixel(20)}}
+          color={colors.theme}
+          size={'small'}
         />
+      ) : (
+        <Button onPress={() => onPressSignup()} children={'Register'} />
       )}
     </Global>
   );

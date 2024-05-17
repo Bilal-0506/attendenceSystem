@@ -1,4 +1,4 @@
-import { RedSnackbar } from '..';
+import {RedSnackbar} from '..';
 
 export const emailFormat =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -71,7 +71,39 @@ export const isChangePasswordValid = (password, newPassword) => {
   return true;
 };
 
-export const isEditValid = (image, firstName, lastName, phoneNumber, address) => {
+export const isPasswordValid = (password, newPassword, confirmPassword) => {
+  if (!passwordFormat.test(password)) {
+    RedSnackbar(
+      '8 Characters required, One Uppercase, One Lowercase, One Number and one special case Character',
+    );
+    return false;
+  }
+  if (!passwordFormat.test(newPassword)) {
+    RedSnackbar(
+      '8 Characters required, One Uppercase, One Lowercase, One Number and one special case Character',
+    );
+    return false;
+  }
+  if (!passwordFormat.test(confirmPassword)) {
+    RedSnackbar(
+      '8 Characters required, One Uppercase, One Lowercase, One Number and one special case Character',
+    );
+    return false;
+  }
+  if (newPassword != confirmPassword) {
+    RedSnackbar('Password not matched');
+    return false;
+  }
+  return true;
+};
+
+export const isEditValid = (
+  image,
+  firstName,
+  lastName,
+  phoneNumber,
+  address,
+) => {
   if (image == null) {
     RedSnackbar('Image required');
     return false;
@@ -88,7 +120,7 @@ export const isEditValid = (image, firstName, lastName, phoneNumber, address) =>
     RedSnackbar('Phone number required');
     return false;
   }
-  if (/^\d+$/.test(phoneNumber)) {
+  if (!/^\d+$/.test(phoneNumber)) {
     RedSnackbar('Phone number only contains numbers');
     return false;
   }
@@ -108,5 +140,3 @@ export const isDeleteValid = password => {
   }
   return true;
 };
-
-

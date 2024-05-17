@@ -4,7 +4,6 @@ const initialState = {
   userData: null,
   accessToken: '',
   refreshToken: '',
-  profileComplete: false,
   isSurvey: false,
   deviceToken: '',
 };
@@ -15,9 +14,6 @@ export const userDataSlice = createSlice({
   reducers: {
     userDataSave: (state, action) => {
       state.userData = action.payload;
-    },
-    userProfileComplete: (state, action) => {
-      state.profileComplete = action.payload;
     },
     accessToken: (state, action) => {
       state.accessToken = action.payload;
@@ -31,6 +27,12 @@ export const userDataSlice = createSlice({
     deviceTokenSave: (state, action) => {
       state.deviceToken = action.payload;
     },
+    clearState: (state, action) => {
+      state.userData = null;
+      state.accessToken = '';
+      state.refreshToken = '';
+      state.deviceToken = '';
+    },
   },
 });
 
@@ -38,9 +40,9 @@ export const {
   userDataSave,
   accessToken,
   refreshToken,
-  userProfileComplete,
   userSurveySave,
   deviceTokenSave,
+  clearState,
 } = userDataSlice.actions;
 
 export default userDataSlice.reducer;

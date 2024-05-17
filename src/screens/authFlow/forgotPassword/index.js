@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { getDeviceId } from 'react-native-device-info';
+import React, {useRef, useState, useEffect} from 'react';
+import {View, ActivityIndicator} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {getDeviceId} from 'react-native-device-info';
 
 import {
   GreenSnackbar,
@@ -11,14 +11,14 @@ import {
   heightPixel,
   routes,
 } from '../../../services';
-import { Global, MyInput } from '../../../components';
-import { styles } from './styles';
+import {Global, MyInput} from '../../../components';
+import {styles} from './styles';
 import Button from '../../../components/button';
-import { isForgotValid } from '../../../services/validations';
-import { api } from '../../../network/Environment';
-import { Method, callApi } from '../../../network/NetworkManger';
+import {isForgotValid} from '../../../services/validations';
+import {api} from '../../../network/Environment';
+import {Method, callApi} from '../../../network/NetworkManger';
 
-const ForgotScreen = ({ navigation }) => {
+const ForgotScreen = ({navigation}) => {
   const statusBar = useRef(null);
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
@@ -30,7 +30,7 @@ const ForgotScreen = ({ navigation }) => {
 
   const onPressResset = () => {
     if (isForgotValid(email)) {
-      forgotApi()
+      forgotApi();
     }
   };
 
@@ -38,7 +38,7 @@ const ForgotScreen = ({ navigation }) => {
     setIsLoading(true);
     let body = {
       email: email.toLowerCase().trim(),
-      device: { id: getDeviceId(), deviceToken: "web" },
+      device: {id: getDeviceId(), deviceToken: 'web'},
     };
     try {
       const endPoint = api.login;
@@ -46,23 +46,20 @@ const ForgotScreen = ({ navigation }) => {
         Method.POST,
         endPoint,
         body,
-        (res) => {
+        res => {
           if (res?.status == 200 && res?.success) {
-            navigation.replace(routes?.otp, {
-              screen: "forgot",
-              email: email.toLowerCase().trim(),
-            });
+            navigation.replace(routes?.buildProfile, {});
             GreenSnackbar(res?.message);
             setIsLoading(false);
           }
         },
-        (err) => {
+        err => {
           RedSnackbar(err.message);
           setIsLoading(false);
-        }
+        },
       );
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       setIsLoading(false);
     }
   };
@@ -94,7 +91,7 @@ const ForgotScreen = ({ navigation }) => {
       ) : (
         <Button
           onPress={() => {
-            onPressResset()
+            onPressResset();
           }}
           children={'Continue'}
         />

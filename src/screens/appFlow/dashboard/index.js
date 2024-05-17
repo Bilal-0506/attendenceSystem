@@ -1,6 +1,6 @@
 import React, {useRef, useEffect} from 'react';
 import {View, Text, Pressable, Image, FlatList} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {ScrollView} from 'react-native-gesture-handler';
 
 import {Global} from '../../../components';
 import {styles} from './styles';
@@ -11,10 +11,11 @@ import {
   routes,
   widthPixel,
 } from '../../../services';
-import {ScrollView} from 'react-native-gesture-handler';
+import {useSelector} from 'react-redux';
 
 const Dashboard = ({navigation}) => {
   const statusBar = useRef(null);
+  const user = useSelector(state => state.user.userData);
 
   useEffect(() => {
     statusBar.current?.darkContent();
@@ -65,6 +66,14 @@ const Dashboard = ({navigation}) => {
     {id: 6, heading: 'Medical Leave', time: '07:01 AM', status: 'Approved'},
   ];
 
+  const attendence = [
+    {id: 1, heading: 'Present', date: new Date().toDateString()},
+    {id: 3, heading: 'Leave', date: new Date().toDateString()},
+    {id: 4, heading: 'Present', date: new Date().toDateString()},
+    {id: 5, heading: 'Present', date: new Date().toDateString()},
+    {id: 6, heading: 'Leave', date: new Date().toDateString()},
+  ];
+
   const Item = ({title, time, status, image, index}) => (
     <View key={index} style={styles.boxConatiner}>
       <Image
@@ -86,7 +95,7 @@ const Dashboard = ({navigation}) => {
     </View>
   );
 
-  const ItemRequest = ({title, status, index}) => (
+  const ItemRequest = ({title, status, time, date, index}) => (
     <View key={index} style={styles.leaveView}>
       <View style={styles.rowAlign}>
         <Text style={{...styles.title, marginRight: widthPixel(8)}}>
@@ -94,7 +103,8 @@ const Dashboard = ({navigation}) => {
         </Text>
         <Text style={styles.title}>{title}</Text>
       </View>
-      <Text style={[styles.subTitle]}>{status}</Text>
+      {date && <Text style={[styles.subTitle]}>{date}</Text>}
+      {status && <Text style={[styles.subTitle]}>{status}</Text>}
     </View>
   );
 
@@ -106,16 +116,13 @@ const Dashboard = ({navigation}) => {
       globalStyle={styles.paddingTop}>
       <View style={{...styles.row, marginBottom: heightPixel(20)}}>
         <View style={styles.rowAlign}>
-          <Image
-            source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}}
-            style={styles.profile}
-          />
+          <Image source={{uri: user?.image}} style={styles.profile} />
           <View>
             <View style={[styles.row, styles.mb5]}>
-              <Text style={styles.title}>Muhammad Bilal</Text>
+              <Text style={styles.title}>{user?.firstName}</Text>
               <Image source={appIcons.handIcon} style={styles.handIcon} />
             </View>
-            <Text style={styles.subTitle}>Lead UI/UX designer</Text>
+            <Text style={styles.subTitle}>{user?.email}</Text>
           </View>
         </View>
         <Pressable onPress={() => navigation.navigate(routes.notification)}>
@@ -142,6 +149,29 @@ const Dashboard = ({navigation}) => {
                   status={item.status}
                   image={item.image}
                   index={index}
+                />
+              )}
+            />
+          </View>
+          <View style={{flex: 1, marginBottom: heightPixel(10)}}>
+            <View
+              style={{
+                ...styles.row,
+                marginBottom: heightPixel(18),
+                marginTop: heightPixel(4),
+              }}>
+              <Text style={styles.heading}>Attendence</Text>
+            </View>
+            <FlatList
+              contentContainerStyle={{flexGrow: 1}}
+              data={attendence}
+              scrollEnabled={false}
+              keyExtractor={item => item.id}
+              renderItem={({item, index}) => (
+                <ItemRequest
+                  title={item.heading}
+                  index={index}
+                  date={item.date}
                 />
               )}
             />
@@ -175,6 +205,7 @@ const Dashboard = ({navigation}) => {
                   title={item.heading}
                   index={index}
                   status={item.status}
+                  time={item.time}
                 />
               )}
             />

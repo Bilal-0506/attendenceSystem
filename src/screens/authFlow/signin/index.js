@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { getDeviceId } from 'react-native-device-info';
+import React, {useRef, useState, useEffect} from 'react';
+import {View, Text, ActivityIndicator} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {getDeviceId} from 'react-native-device-info';
 
 import {
   GreenSnackbar,
@@ -11,15 +11,19 @@ import {
   heightPixel,
   routes,
 } from '../../../services';
-import { Global, MyInput } from '../../../components';
-import { styles } from './styles';
+import {Global, MyInput} from '../../../components';
+import {styles} from './styles';
 import Button from '../../../components/button';
-import { isLoginValid } from '../../../services/validations';
-import { accessToken, refreshToken, userDataSave } from '../../../redux/Slices/userDataSlice';
-import { api } from '../../../network/Environment';
-import { Method, callApi } from '../../../network/NetworkManger';
+import {isLoginValid} from '../../../services/validations';
+import {
+  accessToken,
+  refreshToken,
+  userDataSave,
+} from '../../../redux/Slices/userDataSlice';
+import {api} from '../../../network/Environment';
+import {Method, callApi} from '../../../network/NetworkManger';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({navigation}) => {
   const statusBar = useRef(null);
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
@@ -33,7 +37,7 @@ const LoginScreen = ({ navigation }) => {
 
   const onPressLogin = () => {
     if (isLoginValid(email, password)) {
-      loginApi()
+      loginApi();
     }
   };
 
@@ -42,7 +46,7 @@ const LoginScreen = ({ navigation }) => {
     let body = {
       email: email.toLowerCase().trim(),
       password: password,
-      device: { id: getDeviceId(), deviceToken: "web" },
+      device: {id: getDeviceId(), deviceToken: 'web'},
     };
     try {
       const endPoint = api.login;
@@ -50,7 +54,7 @@ const LoginScreen = ({ navigation }) => {
         Method.POST,
         endPoint,
         body,
-        (res) => {
+        res => {
           if (res?.status == 200 && res?.success) {
             if (res?.data?.user?.verified) {
               dispatch(accessToken(res?.data?.token));
@@ -59,14 +63,14 @@ const LoginScreen = ({ navigation }) => {
               if (res?.data?.user?.profileCompleted) {
                 navigation.reset({
                   index: 0,
-                  routes: [{ name: routes?.drawer }],
+                  routes: [{name: routes?.drawer}],
                 });
               } else {
                 navigation.replace(routes?.buildProfile);
               }
             } else {
               navigation.navigate(routes?.otp, {
-                screen: "signup",
+                screen: 'signup',
                 email: email.toLowerCase().trim(),
               });
             }
@@ -74,17 +78,16 @@ const LoginScreen = ({ navigation }) => {
             setIsLoading(false);
           }
         },
-        (err) => {
+        err => {
           RedSnackbar(err.message);
           setIsLoading(false);
-        }
+        },
       );
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       setIsLoading(false);
     }
   };
-
 
   return (
     <Global
@@ -95,7 +98,7 @@ const LoginScreen = ({ navigation }) => {
       titleIcon={appIcons.handIcon}
       description={'Hello there, login to continue'}
       ref={statusBar}>
-      <View style={{ marginBottom: heightPixel(100) }}>
+      <View style={{marginBottom: heightPixel(100)}}>
         <MyInput
           value={email}
           placeHolder={'Enter your email'}
@@ -116,7 +119,8 @@ const LoginScreen = ({ navigation }) => {
           disable={!isLoading}
         />
         <View style={styles.rowSpace}>
-          <Text disabled={isLoading}
+          <Text
+            disabled={isLoading}
             onPress={() => navigation.navigate(routes.signup)}
             style={styles.forgot}>
             Create new account?
@@ -134,7 +138,7 @@ const LoginScreen = ({ navigation }) => {
       ) : (
         <Button
           onPress={() => {
-            onPressLogin()
+            onPressLogin();
           }}
           children={'Login'}
         />

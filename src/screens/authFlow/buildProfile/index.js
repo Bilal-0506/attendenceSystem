@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { View, ActivityIndicator, Pressable, Image } from 'react-native';
-import { useDispatch } from 'react-redux';
+import React, {useRef, useEffect, useState} from 'react';
+import {View, ActivityIndicator, Pressable, Image} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {
   GreenSnackbar,
@@ -10,17 +10,22 @@ import {
   heightPixel,
   routes,
 } from '../../../services';
-import { Global, MyInput } from '../../../components';
-import { styles } from './styles';
+import {Global, MyInput} from '../../../components';
+import {styles} from './styles';
 import Button from '../../../components/button';
-import { imagePicker } from '../../../services/helpingMethods';
-import { ScrollView } from 'react-native-gesture-handler';
-import { isEditValid } from '../../../services/validations';
-import { api } from '../../../network/Environment';
-import { Method, callApi } from '../../../network/NetworkManger';
-import { accessToken, refreshToken, userDataSave } from '../../../redux/Slices/userDataSlice';
+import {imagePicker} from '../../../services/helpingMethods';
+import {ScrollView} from 'react-native-gesture-handler';
+import {isEditValid} from '../../../services/validations';
+import {api} from '../../../network/Environment';
+import {Method, callApi} from '../../../network/NetworkManger';
+import {
+  accessToken,
+  refreshToken,
+  userDataSave,
+} from '../../../redux/Slices/userDataSlice';
+import {getDeviceId} from 'react-native-device-info';
 
-const BuildProfileScreen = ({ navigation, route }) => {
+const BuildProfileScreen = ({navigation, route}) => {
   const statusBar = useRef(null);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -32,9 +37,11 @@ const BuildProfileScreen = ({ navigation, route }) => {
     'https://reactnative.dev/img/tiny_logo.png',
   );
 
+  const user = useSelector(state => state.user);
+
   useEffect(() => {
     statusBar.current?.darkContent();
-    return () => { };
+    return () => {};
   }, []);
 
   const getImage = async () => {
@@ -48,18 +55,19 @@ const BuildProfileScreen = ({ navigation, route }) => {
 
   const onPressContinue = () => {
     if (isEditValid(image, firstName, lastName, phoneNumber, address)) {
-      buildProfileApi()
+      updateProfile();
     }
   };
 
-  const buildProfileApi = async () => {
+  const updateProfile = async () => {
     setIsLoading(true);
     let body = {
       firstName: firstName,
       lastName: lastName,
       phoneNumber: phoneNumber,
       address: address,
-      device: { id: getDeviceId(), deviceToken: "web" },
+      profileCompleted: true,
+      device: {id: getDeviceId(), deviceToken: 'web'},
     };
     try {
       const endPoint = api.updateProfile;
@@ -67,23 +75,21 @@ const BuildProfileScreen = ({ navigation, route }) => {
         Method.PATCH,
         endPoint,
         body,
-        (res) => {
+        res => {
           if (res?.status == 200 && res?.success) {
-            dispatch(accessToken(res?.data?.token));
-            dispatch(refreshToken(res?.data?.refreshToken));
             dispatch(userDataSave(res?.data?.user));
-            navigation.reset({ index: 0, routes: [{ name: routes.drawer }] });
             GreenSnackbar(res?.message);
+            navigation.reset({index: 0, routes: [{name: routes.drawer}]});
             setIsLoading(false);
           }
         },
-        (err) => {
+        err => {
           RedSnackbar(err.message);
           setIsLoading(false);
-        }
+        },
       );
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       setIsLoading(false);
     }
   };
@@ -97,15 +103,18 @@ const BuildProfileScreen = ({ navigation, route }) => {
       description={'Hello there, enter your information'}
       ref={statusBar}
       globalStyle={styles.wrapper}>
-      <View style={{ flex: 1, marginBottom: heightPixel(20) }}>
+      <View style={{flex: 1, marginBottom: heightPixel(20)}}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ flexGrow: 1 }}>
+          contentContainerStyle={{flexGrow: 1}}>
           <View style={styles.viewOne}>
-            <Pressable disabled={!isLoading} onPress={() => getImage()} style={styles.imageView}>
+            <Pressable
+              disabled={!isLoading}
+              onPress={() => getImage()}
+              style={styles.imageView}>
               <Image
-                source={{ uri: image }}
+                source={{uri: image}}
                 style={styles.imageStyle}
                 borderRadius={100}
               />
@@ -154,11 +163,15 @@ const BuildProfileScreen = ({ navigation, route }) => {
         </ScrollView>
       </View>
       {isLoading ? (
-        <ActivityIndicator color={colors.theme} size={'small'} />
+        <ActivityIndicator
+          style={{marginBottom: heightPixel(20)}}
+          color={colors.theme}
+          size={'small'}
+        />
       ) : (
         <Button
           onPress={() => {
-            onPressContinue()
+            onPressContinue();
           }}
           children={'Update Profile'}
         />

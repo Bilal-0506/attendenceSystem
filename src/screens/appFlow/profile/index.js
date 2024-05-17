@@ -1,17 +1,30 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {View, Text, Image, Pressable} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {View, Text, Image, Pressable, ActivityIndicator} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {Global} from '../../../components';
 import {styles} from './styles';
-import {appIcons, heightPixel, routes, widthPixel} from '../../../services';
-import {userDataSave} from '../../../redux/Slices/userDataSlice';
+import {
+  GreenSnackbar,
+  RedSnackbar,
+  appIcons,
+  colors,
+  heightPixel,
+  routes,
+  widthPixel,
+} from '../../../services';
+import {clearState, userDataSave} from '../../../redux/Slices/userDataSlice';
 import {ScrollView} from 'react-native-gesture-handler';
+import {Method, callApi} from '../../../network/NetworkManger';
+import {api} from '../../../network/Environment';
+import {getDeviceId} from 'react-native-device-info';
 
 const Profile = ({navigation}) => {
   const dispatch = useDispatch();
   const statusBar = useRef(null);
+  const user = useSelector(state => state.user?.userData);
   const [image, setImage] = useState(appIcons.carImage);
+  const [isLoading, setIsLoading] = useState(false);
   const [list, setlist] = useState([
     {
       id: 1,
@@ -55,9 +68,34 @@ const Profile = ({navigation}) => {
     statusBar.current?.darkContent();
   }, []);
 
-  const onPress = () => {
-    dispatch(userDataSave(false));
-    navigation.reset({index: 0, routes: [{name: routes.auth}]});
+  const onPressLogout = async () => {
+    setIsLoading(true);
+    let body = {
+      device: {id: getDeviceId(), deviceToken: 'web'},
+    };
+    try {
+      const endPoint = api.userLogout;
+      await callApi(
+        Method.POST,
+        endPoint,
+        body,
+        res => {
+          if (res?.status == 200 && res?.success) {
+            dispatch(clearState());
+            GreenSnackbar(res?.message);
+            navigation.reset({index: 0, routes: [{name: routes.auth}]});
+            setIsLoading(false);
+          }
+        },
+        err => {
+          RedSnackbar(err.message);
+          setIsLoading(false);
+        },
+      );
+    } catch (error) {
+      console.log('error', error);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -70,7 +108,11 @@ const Profile = ({navigation}) => {
       ref={statusBar}>
       <View style={styles.viewOne}>
         <Pressable style={styles.imageView}>
-          <Image source={image} style={styles.imageView} borderRadius={100} />
+          <Image
+            source={{uri: user?.image}}
+            style={styles.imageView}
+            borderRadius={100}
+          />
         </Pressable>
         <Text
           style={{
@@ -78,9 +120,9 @@ const Profile = ({navigation}) => {
             marginTop: heightPixel(8),
             marginBottom: heightPixel(6),
           }}>
-          Muhammad Bilal
+          {user?.firstName}
         </Text>
-        <Text style={{...styles.subTitle}}>burnash057@gmail.com</Text>
+        <Text style={{...styles.subTitle}}>{user?.email}</Text>
       </View>
       <View style={{flex: 1}}>
         <ScrollView
@@ -92,9 +134,10 @@ const Profile = ({navigation}) => {
               <View style={styles.dropView}>
                 {item?.item?.map((data, index) => (
                   <Pressable
+                    disabled={isLoading}
                     onPress={() => {
                       data.title == 'Logout'
-                        ? onPress()
+                        ? onPressLogout()
                         : data.title == 'Profile Type'
                         ? ''
                         : navigation.navigate(data?.route);
@@ -114,13 +157,24 @@ const Profile = ({navigation}) => {
                       <Text style={styles.subTitle}>{data?.title}</Text>
                     </View>
                     <View style={styles.row}>
-                      {data.title == 'Language' && (
-                        <Text style={styles.langText}>English</Text>
+                      {data.title == 'Logout' ? (
+                        isLoading ? (
+                          <ActivityIndicator
+                            color={colors.theme}
+                            size={'small'}
+                          />
+                        ) : (
+                          <Image
+                            source={appIcons.chevronRightIcon}
+                            style={styles.rightIcon}
+                          />
+                        )
+                      ) : (
+                        <Image
+                          source={appIcons.chevronRightIcon}
+                          style={styles.rightIcon}
+                        />
                       )}
-                      <Image
-                        source={appIcons.chevronRightIcon}
-                        style={styles.rightIcon}
-                      />
                     </View>
                   </Pressable>
                 ))}
